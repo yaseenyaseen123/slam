@@ -101,6 +101,7 @@
         section:nth-of-type(4) { animation-delay: 0.8s; }
         section:nth-of-type(5) { animation-delay: 1.0s; }
         section:nth-of-type(6) { animation-delay: 1.2s; }
+        section:nth-of-type(7) { animation-delay: 1.4s; }
 
         @keyframes fadeInScale {
             to { opacity: 1; transform: translateY(0); }
@@ -184,6 +185,85 @@
             height: 200px;
             object-fit: cover;
             display: block;
+        }
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+        }
+        .download-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 1.5em;
+            line-height: 1;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        .download-link {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            text-decoration: none;
+            z-index: 10;
+        }
+        .gallery-item:hover .download-icon {
+            opacity: 1;
+        }
+        .image-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .image-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .image-popup-content {
+            position: relative;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+        }
+        .image-popup-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+        .image-popup-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .video-item iframe {
             width: 100%;
@@ -382,9 +462,8 @@
             <ul class="program-list">
                 <li>
                     <h3>على الطريق مع سلام</h3>
-                    <p>برنامج
- حواري مسائي يتناول قضايا اجتماعية وثقافية متنوعة، ويستضيف شخصيات  FM</p>
-                    <p>المواعيد: الأحد إلى الخميس،5:00 مساء</p>
+                    <p>برنامج حواري مسائي يتناول قضايا اجتماعية وثقافية متنوعة، ويستضيف شخصيات مؤثرة من مختلف المجالات على راديو الرابعة 107.8 FM</p>
+                    <p>المواعيد: الأحد إلى الخميس، 5:00 مساء</p>
                 </li>
                 <li>
                     <h3>بودكاست مع سلام</h3>
@@ -397,26 +476,95 @@
         <section>
             <h2>معرض الصور</h2>
             <ul class="gallery">
-                <li class="gallery-item"><img src="salam_guest1.jpg" alt="سلام حمود مع ضيف"></li>
-                <li class="gallery-item"><img src="salam_guest2.jpg" alt="سلام حمود مع ضيف"></li>
-                <li class="gallery-item"><img src="salam_guest3.jpg" alt="سلام حمود مع ضيف"></li>
-                <li class="gallery-item"><img src="salam_hammoud.jpg" alt="سلام حمود"></li>
-                <li class="gallery-item"><img src="salam_extra1.jpg" alt="سلام حمود"></li>
-                <li class="gallery-item"><img src="https://www2.0zz0.com/2025/07/11/15/919428518.jpeg" alt="سلام حمود"></li>
-                <li class="gallery-item"><img src="salam_extra3.jpg" alt="سلام حمود"></li>
+                <li class="gallery-item">
+                    <img src="salam_guest1.jpg" alt="سلام حمود مع ضيف" onclick="openImagePopup('salam_guest1.jpg')">
+                    <a href="salam_guest1.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_guest2.jpg" alt="سلام حمود مع ضيف" onclick="openImagePopup('salam_guest2.jpg')">
+                    <a href="salam_guest2.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_guest3.jpg" alt="سلام حمود مع ضيف" onclick="openImagePopup('salam_guest3.jpg')">
+                    <a href="salam_guest3.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_hammoud.jpg" alt="سلام حمود" onclick="openImagePopup('salam_hammoud.jpg')">
+                    <a href="salam_hammoud.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img1.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img1.jpg')">
+                    <a href="salam_new_img1.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img2.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img2.jpg')">
+                    <a href="salam_new_img2.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img3.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img3.jpg')">
+                    <a href="salam_new_img3.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img4.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img4.jpg')">
+                    <a href="salam_new_img4.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img5.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img5.jpg')">
+                    <a href="salam_new_img5.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img6.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img6.jpg')">
+                    <a href="salam_new_img6.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
+                <li class="gallery-item">
+                    <img src="salam_new_img7.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img7.jpg')">
+                    <a href="salam_new_img7.jpg" download class="download-link"><i class="download-icon">&#x2193;</i></a>
+                </li>
             </ul>
         </section>
 
-        <section>
-            <h2>راديو الرابعة من الإمارات (بث مباشر)</h2>
-            <div class="radio-player">
-                <img src="alrabia_logo.jpg" alt="شعار راديو الرابعة">
-                <audio controls>
-                    <source src="https://stream.alrabiafm.com/live" type="audio/mpeg">
-                    متصفحك لا يدعم عنصر الصوت.
-                </audio>
-                <p>استمعوا إلى راديو الرابعة 107.8 FM مباشرةً من الإمارات.</p>
+        <!-- Image Popup -->
+        <div class="image-popup-overlay" id="imagePopup">
+            <div class="image-popup-content">
+                <span class="close-btn" onclick="closeImagePopup()">&times;</span>
+                <img src="" alt="صورة مكبرة" id="popupImage">
             </div>
+        </div>
+
+        <section>
+            <h2>أعمال سابقة وبرامج قديمة</h2>
+            <ul class="program-list">
+                <li>
+                    <h3>برنامج سيلفي (ضيفة)</h3>
+                    <p>ظهرت سلام حمود كضيفة في برنامج سيلفي على قناة الظفرة، في فقرة المحبة والتسامح (الحلقة الأولى من الموسم الثاني).</p>
+                    <p>تاريخ: 5 نوفمبر 2015</p>
+                </li>
+                <li>
+                    <h3>برنامج كيدز كلوب</h3>
+                    <p>برنامج للأطفال كانت تقدمه سلام حمود على راديو الرابعة، يهدف إلى نشر الحب والفرح بين الأطفال.</p>
+                    <p>تاريخ: 29 يونيو 2019</p>
+                </li>
+                <li>
+                    <h3>لقاءات انستقرام لايف</h3>
+                    <p>أجرت سلام حمود العديد من اللقاءات المباشرة عبر انستقرام راديو الرابعة، منها لقاء مع الفنانة باسكال مشعلاني.</p>
+                    <p>تاريخ: 20 مايو 2020</p>
+                </li>
+                <li>
+                    <h3>برنامج ريفريش</h3>
+                    <p>شاركت سلام حمود في تقديم برنامج ريفريش على راديو الرابعة، وهو برنامج متنوع يتناول مواضيع اجتماعية وثقافية.</p>
+                    <p>تاريخ: نوفمبر 2020</p>
+                </li>
+                <li>
+                    <h3>برنامج يا هلا (ضيفة)</h3>
+                    <p>ظهرت كضيفة في برنامج يا هلا للحديث عن تحضيرات ومتابعة العمل الإذاعي ومواكبة الوسائل الحديثة.</p>
+                    <p>تاريخ: 13 فبراير 2022</p>
+                </li>
+                <li>
+                    <h3>لقاء محمد عساف</h3>
+                    <p>أجرت لقاءً مميزاً مع الفنان محمد عساف على راديو الرابعة وتلفزيون عجمان، والذي حقق نجاحاً كبيراً.</p>
+                    <p>تاريخ: 2014</p>
+                </li>
+            </ul>
         </section>
 
         <section>
@@ -459,6 +607,18 @@
 
         function closePopup() {
             const popup = document.getElementById('welcomePopup');
+            popup.classList.remove('active');
+        }
+
+        function openImagePopup(imageSrc) {
+            const popup = document.getElementById('imagePopup');
+            const popupImage = document.getElementById('popupImage');
+            popupImage.src = imageSrc;
+            popup.classList.add('active');
+        }
+
+        function closeImagePopup() {
+            const popup = document.getElementById('imagePopup');
             popup.classList.remove('active');
         }
     </script>
