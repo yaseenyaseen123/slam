@@ -99,6 +99,8 @@
         section:nth-of-type(2) { animation-delay: 0.4s; }
         section:nth-of-type(3) { animation-delay: 0.6s; }
         section:nth-of-type(4) { animation-delay: 0.8s; }
+        section:nth-of-type(5) { animation-delay: 1.0s; }
+        section:nth-of-type(6) { animation-delay: 1.2s; }
 
         @keyframes fadeInScale {
             to { opacity: 1; transform: translateY(0); }
@@ -123,7 +125,8 @@
         }
         .program-list,
         .social-links,
-        .gallery {
+        .gallery,
+        .video-grid {
             list-style: none;
             padding: 0;
             display: flex;
@@ -162,7 +165,8 @@
             height: 32px;
             filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         }
-        .gallery-item {
+        .gallery-item,
+        .video-item {
             width: calc(33.333% - 25px);
             box-sizing: border-box;
             border-radius: 10px;
@@ -170,7 +174,8 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .gallery-item:hover {
+        .gallery-item:hover,
+        .video-item:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
@@ -179,6 +184,28 @@
             height: 200px;
             object-fit: cover;
             display: block;
+        }
+        .video-item iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+        .radio-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .radio-player img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .radio-player audio {
+            width: 80%;
+            max-width: 400px;
         }
         footer {
             padding: 25px;
@@ -306,7 +333,8 @@
                 flex: 1 1 100%;
                 max-width: 100%;
             }
-            .gallery-item {
+            .gallery-item,
+            .video-item {
                 width: calc(50% - 25px);
             }
             .popup-content h2 {
@@ -318,7 +346,8 @@
         }
 
         @media (max-width: 480px) {
-            .gallery-item {
+            .gallery-item,
+            .video-item {
                 width: 100%;
             }
         }
@@ -371,6 +400,36 @@
                 <li class="gallery-item"><img src="salam_guest2.jpg" alt="سلام حمود مع ضيف"></li>
                 <li class="gallery-item"><img src="salam_guest3.jpg" alt="سلام حمود مع ضيف"></li>
                 <li class="gallery-item"><img src="salam_hammoud.jpg" alt="سلام حمود"></li>
+                <li class="gallery-item"><img src="salam_extra1.jpg" alt="سلام حمود"></li>
+                <li class="gallery-item"><img src="salam_extra2.jpg" alt="سلام حمود"></li>
+                <li class="gallery-item"><img src="salam_extra3.jpg" alt="سلام حمود"></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>راديو الرابعة من الإمارات (بث مباشر)</h2>
+            <div class="radio-player">
+                <img src="alrabia_logo.jpg" alt="شعار راديو الرابعة">
+                <audio controls>
+                    <source src="https://stream.alrabiafm.com/live" type="audio/mpeg">
+                    متصفحك لا يدعم عنصر الصوت.
+                </audio>
+                <p>استمعوا إلى راديو الرابعة 107.8 FM مباشرةً من الإمارات.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>فيديوهات مختارة</h2>
+            <ul class="video-grid">
+                <li class="video-item">
+                    <iframe src="https://www.youtube.com/embed/M9tQ0yM9sLY" allowfullscreen></iframe>
+                </li>
+                <li class="video-item">
+                    <iframe src="https://www.youtube.com/embed/_fQojSdArPE" allowfullscreen></iframe>
+                </li>
+                <li class="video-item">
+                    <iframe src="https://www.youtube.com/embed/83B6pgx2He4" allowfullscreen></iframe>
+                </li>
             </ul>
         </section>
 
