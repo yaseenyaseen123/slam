@@ -4,113 +4,339 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سلام حمود - الإعلامية القديرة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6a0572; /* Deep Purple */
+            --secondary-color: #ab20fd; /* Lighter Purple */
+            --accent-color: #ff6b6b; /* Coral Red */
+            --text-color: #fff;
+            --bg-section: rgba(255, 255, 255, 0.15);
+            --bg-header-footer: rgba(0, 0, 0, 0.4);
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom right, #8e2de2, #4a00e0);
-            color: #fff;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('salam_hammoud.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4) blur(8px);
+            z-index: -1;
+            animation: fadeInBackground 2s ease-in-out forwards;
+        }
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .container {
-            max-width: 960px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
         header {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--bg-header-footer);
             padding: 40px 0;
             margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: slideInFromTop 1s ease-out forwards;
+        }
+        @keyframes slideInFromTop {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         header h1 {
-            font-size: 3.5em;
+            font-size: 4.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+            color: #fff;
         }
         header p {
-            font-size: 1.2em;
+            font-size: 1.5em;
             opacity: 0.9;
         }
         .profile-img {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #fff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
+            border: 6px solid #fff;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .profile-img:hover {
+            transform: scale(1.05) rotate(5deg);
         }
         section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            background: var(--bg-section);
+            padding: 35px;
             margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: fadeInScale 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        section:nth-of-type(1) { animation-delay: 0.2s; }
+        section:nth-of-type(2) { animation-delay: 0.4s; }
+        section:nth-of-type(3) { animation-delay: 0.6s; }
+        section:nth-of-type(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInScale {
+            to { opacity: 1; transform: translateY(0); }
         }
         section h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-size: 3.2em;
+            margin-bottom: 25px;
             color: #f0f0f0;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
         }
         .program-list,
-        .social-links {
+        .social-links,
+        .gallery {
             list-style: none;
             padding: 0;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
         }
         .program-list li,
         .social-links li {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 1.1em;
-            transition: background 0.3s ease;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            flex: 1 1 calc(50% - 25px);
+            max-width: calc(50% - 25px);
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         .program-list li:hover,
         .social-links li:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
         }
         .social-links a {
-            color: #fff;
+            color: var(--text-color);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-weight: bold;
         }
         .social-links img {
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+        .gallery-item {
+            width: calc(33.333% - 25px);
+            box-sizing: border-box;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
         }
         footer {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            font-size: 0.9em;
-            opacity: 0.8;
+            padding: 25px;
+            background: var(--bg-header-footer);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 30px;
+            animation: slideInFromBottom 1s ease-out forwards;
+        }
+        @keyframes slideInFromBottom {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .footer-text {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            font-size: 1.1em;
         }
         .heart-icon {
-            color: #ff4d4d;
+            color: var(--accent-color);
+            font-size: 1.3em;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.5s ease;
+            overflow: hidden;
+        }
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+        .popup-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('salam_hammoud.jpg'); /* Popup background image */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3) blur(3px);
+            z-index: -1;
+        }
+        .popup-content h2 {
+            font-size: 3em;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .popup-content p {
+            font-size: 1.5em;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+        }
+        .popup-close-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .popup-close-btn:hover {
+            background: #e04444;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 3.5em;
+            }
+            header p {
+                font-size: 1.2em;
+            }
+            .profile-img {
+                width: 180px;
+                height: 180px;
+            }
+            section h2 {
+                font-size: 2.8em;
+            }
+            .program-list li,
+            .social-links li {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+            .gallery-item {
+                width: calc(50% - 25px);
+            }
+            .popup-content h2 {
+                font-size: 2.5em;
+            }
+            .popup-content p {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-item {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Welcome Popup -->
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup-content">
+            <h2>أهلاً بك في صفحة الإعلامية سلام حمود</h2>
+            <p>اكتشف مسيرتها الإعلامية وبرامجها المميزة</p>
+            <button class="popup-close-btn" onclick="closePopup()">ابدأ التصفح</button>
+        </div>
+    </div>
+
     <div class="container">
         <header>
-            <img src="https://yaseenyaseen123.github.io/slam/salam_hammoud.jpg" alt="سلام حمود" class="profile-img">
+            <img src="salam_hammoud.jpg" alt="سلام حمود" class="profile-img">
             <h1>سلام حمود</h1>
             <p>الإعلامية القديرة | مذيعة ومعدة برامج</p>
             <p>خبرة تزيد عن 15 عامًا في مجال الإعلام، متخصصة في فن الإلقاء والخطابة والتعليق الصوتي والبودكاست.</p>
@@ -139,10 +365,20 @@
         </section>
 
         <section>
+            <h2>معرض الصور</h2>
+            <ul class="gallery">
+                <li class="gallery-item"><img src="salam_guest1.jpg" alt="سلام حمود مع ضيف"></li>
+                <li class="gallery-item"><img src="salam_guest2.jpg" alt="سلام حمود مع ضيف"></li>
+                <li class="gallery-item"><img src="salam_guest3.jpg" alt="سلام حمود مع ضيف"></li>
+                <li class="gallery-item"><img src="salam_hammoud.jpg" alt="سلام حمود"></li>
+            </ul>
+        </section>
+
+        <section>
             <h2>تابعوني على</h2>
             <ul class="social-links">
                 <li><a href="https://instagram.com/salam_hammoud" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"> Instagram</a></li>
-                <li><a href="https://tiktok.com/@salam_hammoud" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/TikTok_icon.svg/1200px-TikTok_icon.svg.png" alt="TikTok"> TikTok</a></li>
+                <li><a href="https://www.tiktok.com/@salam_hammoud" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/TikTok_icon.svg/1200px-TikTok_icon.svg.png" alt="TikTok"> TikTok</a></li>
                 <li><a href="https://youtube.com/@salamhammoud9" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube"> YouTube</a></li>
                 <li><a href="https://facebook.com/Salam.Hammoud.Anchor" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/1200px-2021_Facebook_icon.svg.png" alt="Facebook"> Facebook</a></li>
                 <li><a href="https://twitter.com/SalamHam" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1200px-Logo_of_Twitter.svg.png" alt="Twitter"> Twitter</a></li>
@@ -154,6 +390,18 @@
             <p class="footer-text"><span class="heart-icon">❤</span> إهداء من فلسطيني إلى الإعلامية القديرة سلام حمود 🤍</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('welcomePopup');
+            popup.classList.add('active');
+        });
+
+        function closePopup() {
+            const popup = document.getElementById('welcomePopup');
+            popup.classList.remove('active');
+        }
+    </script>
 </body>
 </html>
 
