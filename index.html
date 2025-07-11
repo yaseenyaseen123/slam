@@ -1,15 +1,159 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سلام حمود - الإعلامية القديرة</title>
-    <script type="module" crossorigin src="/slam/assets/index-BXESPLPW.js"></script>
-    <link rel="stylesheet" crossorigin href="/slam/assets/index-BAWWgaSZ.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #8e2de2, #4a00e0);
+            color: #fff;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+        .program-list,
+        .social-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .program-list li,
+        .social-links li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: background 0.3s ease;
+        }
+        .program-list li:hover,
+        .social-links li:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .social-links a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .social-links img {
+            width: 24px;
+            height: 24px;
+        }
+        footer {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .footer-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .heart-icon {
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://yaseenyaseen123.github.io/slam/salam_hammoud.jpg" alt="سلام حمود" class="profile-img">
+            <h1>سلام حمود</h1>
+            <p>الإعلامية القديرة | مذيعة ومعدة برامج</p>
+            <p>خبرة تزيد عن 15 عامًا في مجال الإعلام، متخصصة في فن الإلقاء والخطابة والتعليق الصوتي والبودكاست.</p>
+        </header>
+
+        <section>
+            <h2>عن سلام حمود</h2>
+            <p>إعلامية لبنانية متميزة، تحمل خبرة واسعة في مجال الإذاعة والتلفزيون تمتد لأكثر من 15 عامًا، تنقلت خلالها بين لبنان والكويت والإمارات العربية المتحدة. انضمت إلى راديو الرابعة في الإمارات عام 2008، حيث أصبحت صوتًا مألوفًا ومحبوبًا لدى المستمعين. درست التسويق والعلاقات العامة، وهي مدربة معتمدة في مجالات تأهيل المدربين وفن الإلقاء والخطابة.</p>
+            <p>تؤمن سلام بأن الرسالة الأسمى للإعلام هي مشاركة الناس وترك أثر إيجابي فيهم، وهو ما تسعى لتحقيقه من خلال عملها الذي يتميز بالعفوية والشفافية.</p>
+        </section>
+
+        <section>
+            <h2>برامجها</h2>
+            <ul class="program-list">
+                <li>
+                    <h3>صباح الخير يا إمارات</h3>
+                    <p>برنامج إذاعي على راديو الرابعة 107.8 FM</p>
+                    <p>المواعيد: الأحد إلى الخميس، 6:00 صباحاً</p>
+                </li>
+                <li>
+                    <h3>بودكاست مع سلام</h3>
+                    <p>بودكاست حواري على منصات متعددة</p>
+                    <p>المواعيد: الخميس، 7:00 مساءً</p>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>تابعوني على</h2>
+            <ul class="social-links">
+                <li><a href="https://instagram.com/salam_hammoud" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"> Instagram</a></li>
+                <li><a href="https://tiktok.com/@salam_hammoud" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/TikTok_icon.svg/1200px-TikTok_icon.svg.png" alt="TikTok"> TikTok</a></li>
+                <li><a href="https://youtube.com/@salamhammoud9" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube"> YouTube</a></li>
+                <li><a href="https://facebook.com/Salam.Hammoud.Anchor" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/1200px-2021_Facebook_icon.svg.png" alt="Facebook"> Facebook</a></li>
+                <li><a href="https://twitter.com/SalamHam" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1200px-Logo_of_Twitter.svg.png" alt="Twitter"> Twitter</a></li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>جميع الحقوق محفوظة © 2025</p>
+            <p class="footer-text"><span class="heart-icon">❤</span> إهداء من فلسطيني إلى الإعلامية القديرة سلام حمود 🤍</p>
+        </footer>
+    </div>
+</body>
 </html>
 
