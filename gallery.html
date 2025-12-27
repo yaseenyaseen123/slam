@@ -228,6 +228,14 @@
     </div>
 
     <script>
+        // Load background image from localStorage
+        const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+        if (siteData.basic && siteData.basic.backgroundImage) {
+            const style = document.createElement('style');
+            style.textContent = `body::before { background-image: url('${siteData.basic.backgroundImage}') !important; }`;
+            document.head.appendChild(style);
+        }
+        
         function openImagePopup(src) {
             document.getElementById('imagePopup').classList.add('active');
             document.getElementById('popupImage').src = src;

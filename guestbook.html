@@ -337,6 +337,14 @@
             return div.innerHTML;
         }
 
+        // Load background image from localStorage
+        const savedData = JSON.parse(localStorage.getItem('siteData') || '{}');
+        if (savedData.basic && savedData.basic.backgroundImage) {
+            const style = document.createElement('style');
+            style.textContent = `body::before { background-image: url('${savedData.basic.backgroundImage}') !important; }`;
+            document.head.appendChild(style);
+        }
+
         // Load comments on page load
         loadComments();
         

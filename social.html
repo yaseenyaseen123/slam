@@ -315,6 +315,13 @@
         // Load social media data from localStorage
         const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
         
+        // Update background image
+        if (siteData.basic && siteData.basic.backgroundImage) {
+            const style = document.createElement('style');
+            style.textContent = `body::before { background-image: url('${siteData.basic.backgroundImage}') !important; }`;
+            document.head.appendChild(style);
+        }
+        
         if (siteData.social) {
             // Update icons
             if (siteData.social.instagram_icon) document.getElementById('instagram-icon').textContent = siteData.social.instagram_icon;

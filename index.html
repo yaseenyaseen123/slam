@@ -777,6 +777,31 @@
     </div>
 
     <script>
+        // Load custom images from localStorage
+        const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+        
+        if (siteData.basic) {
+            // Update profile image
+            if (siteData.basic.profileImage) {
+                const profileImg = document.querySelector('.profile-img');
+                if (profileImg) profileImg.src = siteData.basic.profileImage;
+            }
+            
+            // Update background image
+            if (siteData.basic.backgroundImage) {
+                const style = document.createElement('style');
+                style.textContent = `
+                    body::before {
+                        background-image: url('${siteData.basic.backgroundImage}') !important;
+                    }
+                    .popup-content::before {
+                        background-image: url('${siteData.basic.backgroundImage}') !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const popup = document.getElementById('welcomePopup');
             popup.classList.add('active');
