@@ -207,19 +207,22 @@
         <div class="success-msg" id="successMsg">تم إرسال رسالتك بنجاح! ✅</div>
 
         <div class="comment-form">
-            <form onsubmit="submitComment(event)">
+            <form onsubmit="submitComment(event)" id="commentForm">
                 <div class="form-group">
                     <label>الاسم</label>
-                    <input type="text" id="name" placeholder="اسمك الكريم" required>
+                    <input type="text" id="name" name="name" placeholder="اسمك الكريم" required>
                 </div>
                 <div class="form-group">
                     <label>البريد الإلكتروني (اختياري)</label>
-                    <input type="email" id="email" placeholder="your@email.com">
+                    <input type="email" id="email" name="email" placeholder="your@email.com">
                 </div>
                 <div class="form-group">
                     <label>رسالتك</label>
-                    <textarea id="message" placeholder="اكتب رسالتك هنا..." required></textarea>
+                    <textarea id="message" name="message" placeholder="اكتب رسالتك هنا..." required></textarea>
                 </div>
+                <input type="hidden" name="_subject" value="رسالة جديدة من بصمات الزوار - موقع سلام حمود">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
                 <button type="submit" class="submit-btn">إرسال الرسالة ✨</button>
             </form>
         </div>
@@ -234,6 +237,7 @@
         const REPO_OWNER = 'yaseenyaseen123';
         const REPO_NAME = 'slam';
         const COMMENTS_FILE = 'comments.json';
+        const FORM_ENDPOINT = 'https://formspree.io/f/xovqejqa'; // مؤقت للتجربة
         
         // Load comments from GitHub
         async function loadComments() {
@@ -260,36 +264,54 @@
             }
         }
 
-        function submitComment(event) {
+        async function submitComment(event) {
             event.preventDefault();
             
+            const form = event.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
             
-            // Create GitHub Issue URL with pre-filled data
-            const issueTitle = encodeURIComponent('رسالة من: ' + name);
-            const issueBody = encodeURIComponent(
-                '**الاسم:** ' + name + '\n' +
-                (email ? '**البريد الإلكتروني:** ' + email + '\n' : '') +
-                '**التاريخ:** ' + new Date().toLocaleDateString('ar-EG') + '\n\n' +
-                '**الرسالة:**\n' + message + '\n\n---\n_تم الإرسال من صفحة بصمات الزوار_'
-            );
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الإرسال...';
             
-            const githubUrl = 'https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/issues/new?labels=guestbook&title=' + issueTitle + '&body=' + issueBody;
-            
-            // Open GitHub in new tab
-            window.open(githubUrl, '_blank');
-            
-            // Show instructions
-            const successMsg = document.getElementById('successMsg');
-            successMsg.innerHTML = '✅ تم فتح صفحة جديدة! اضغط على "Submit new issue" لإرسال رسالتك.<br>إذا لم تفتح الصفحة، <a href="' + githubUrl + '" target="_blank" style="color: white; text-decoration: underline;">اضغط هنا</a>';
-            successMsg.style.display = 'block';
-            
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('message').value = '';
+            try {
+                // Send to Formspree
+                const formData = new FormData(form);
+                formData.append('_replyto', email || 'noreply@example.com');
+                formData.append('date', new Date().toLocaleDateString('ar-EG'));
+                
+                const response = await fetch(FORM_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Clear form
+                    document.getElementById('name').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('message').value = '';
+                    
+                    // Show success message
+                    const successMsg = document.getElementById('successMsg');
+                    successMsg.textContent = 'تم إرسال رسالتك بنجاح! ستظهر بعد المراجعة ✅';
+                    successMsg.style.display = 'block';
+                    setTimeout(function() {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                } else {
+                    alert('حدث خطأ في إرسال الرسالة. الرجاء المحاولة مرة أخرى.');
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال. الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال الرسالة ✨';
+            }
         }
 
         function escapeHtml(text) {
