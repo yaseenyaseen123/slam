@@ -239,7 +239,7 @@
             container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">جاري التحميل...</p>';
             
             try {
-                const response = await fetch(FIREBASE_DB_URL + '/comments.json?orderBy="approved"&equalTo=true');
+                const response = await fetch(FIREBASE_DB_URL + '/comments.json');
                 const data = await response.json();
                 
                 if (!data || Object.keys(data).length === 0) {
@@ -247,10 +247,17 @@
                     return;
                 }
                 
-                // Convert to array and sort
-                const comments = Object.entries(data).map(function([id, comment]) {
-                    return { ...comment, firebaseId: id };
-                }).filter(function(c) { return c.approved; });
+                // Convert to array, filter approved, and sort
+                const comments = Object.entries(data)
+                    .map(function([id, comment]) {
+                        return { ...comment, firebaseId: id };
+                    })
+                    .filter(function(c) { return c.approved === true; });
+                
+                if (comments.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">كن أول من يترك رسالة!</p>';
+                    return;
+                }
                 
                 comments.sort(function(a, b) { return b.timestamp - a.timestamp; });
                 
@@ -258,6 +265,7 @@
                     return '<li class="comment-item"><div class="comment-header"><span class="comment-author">' + escapeHtml(comment.name) + '</span><span class="comment-date">' + comment.date + '</span></div><div class="comment-text">' + escapeHtml(comment.message) + '</div>' + (comment.reply ? '<div class="comment-reply"><span class="reply-label">رد من سلام حمود:</span><div>' + escapeHtml(comment.reply) + '</div></div>' : '') + '</li>';
                 }).join('');
             } catch (error) {
+                console.error('Error loading comments:', error);
                 container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">كن أول من يترك رسالة!</p>';
             }
         }
