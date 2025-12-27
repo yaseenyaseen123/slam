@@ -235,44 +235,29 @@
         const REPO_NAME = 'slam';
         const COMMENTS_FILE = 'comments.json';
         
-        // Load comments from GitHub and localStorage
+        // Load comments from GitHub
         async function loadComments() {
             const container = document.getElementById('commentsList');
             container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">جاري التحميل...</p>';
             
-            let comments = [];
-            
-            // Try to load from GitHub first
             try {
                 const response = await fetch('https://raw.githubusercontent.com/' + REPO_OWNER + '/' + REPO_NAME + '/main/' + COMMENTS_FILE + '?t=' + Date.now());
-                comments = await response.json();
-            } catch (error) {
-                // Fallback to localStorage if GitHub fails
-                comments = [];
-            }
-            
-            // Merge with localStorage comments
-            const localComments = JSON.parse(localStorage.getItem('guestbookComments') || '[]');
-            
-            // Add local comments that aren't in GitHub yet
-            localComments.forEach(function(localComment) {
-                const exists = comments.some(function(c) { return c.id === localComment.id; });
-                if (!exists) {
-                    comments.push(localComment);
+                const comments = await response.json();
+                
+                if (comments.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">كن أول من يترك رسالة!</p>';
+                    return;
                 }
-            });
-            
-            if (comments.length === 0) {
+                
+                // Sort by ID (newest first)
+                comments.sort(function(a, b) { return b.id - a.id; });
+                
+                container.innerHTML = comments.map(function(comment) {
+                    return '<li class="comment-item"><div class="comment-header"><span class="comment-author">' + escapeHtml(comment.name) + '</span><span class="comment-date">' + comment.date + '</span></div><div class="comment-text">' + escapeHtml(comment.message) + '</div>' + (comment.reply ? '<div class="comment-reply"><span class="reply-label">رد من سلام حمود:</span><div>' + escapeHtml(comment.reply) + '</div></div>' : '') + '</li>';
+                }).join('');
+            } catch (error) {
                 container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">كن أول من يترك رسالة!</p>';
-                return;
             }
-            
-            // Sort by ID (newest first)
-            comments.sort(function(a, b) { return b.id - a.id; });
-            
-            container.innerHTML = comments.map(function(comment) {
-                return '<li class="comment-item"><div class="comment-header"><span class="comment-author">' + escapeHtml(comment.name) + '</span><span class="comment-date">' + comment.date + '</span></div><div class="comment-text">' + escapeHtml(comment.message) + '</div>' + (comment.reply ? '<div class="comment-reply"><span class="reply-label">رد من سلام حمود:</span><div>' + escapeHtml(comment.reply) + '</div></div>' : '') + '</li>';
-            }).join('');
         }
 
         async function submitComment(event) {
@@ -286,51 +271,49 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإرسال...';
             
-            const newComment = {
-                id: Date.now(),
-                name: name,
-                email: email,
-                message: message,
-                date: new Date().toLocaleDateString('ar-EG', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                reply: null
-            };
-            
-            // Save to localStorage immediately for display
-            let comments = [];
             try {
-                const response = await fetch('https://raw.githubusercontent.com/' + REPO_OWNER + '/' + REPO_NAME + '/main/' + COMMENTS_FILE + '?t=' + Date.now());
-                comments = await response.json();
-            } catch (e) {
-                comments = [];
+                // Create GitHub Issue as comment submission
+                const issueTitle = 'رسالة من: ' + name;
+                const issueBody = '**الاسم:** ' + name + '\n' +
+                                 (email ? '**البريد:** ' + email + '\n' : '') +
+                                 '**التاريخ:** ' + new Date().toLocaleDateString('ar-EG') + '\n\n' +
+                                 '**الرسالة:**\n' + message;
+                
+                const response = await fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/issues', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        title: issueTitle,
+                        body: issueBody,
+                        labels: ['guestbook']
+                    })
+                });
+                
+                if (response.status === 201) {
+                    // Clear form
+                    document.getElementById('name').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('message').value = '';
+                    
+                    // Show success message
+                    const successMsg = document.getElementById('successMsg');
+                    successMsg.textContent = 'تم إرسال رسالتك بنجاح! ستظهر بعد المراجعة ✅';
+                    successMsg.style.display = 'block';
+                    setTimeout(function() {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                } else {
+                    alert('حدث خطأ في إرسال الرسالة. رسالتك: "' + message.substring(0, 50) + '..." - الرجاء نسخها والتواصل مباشرة.');
+                }
+            } catch (error) {
+                alert('حدث خطأ في إرسال الرسالة. الرجاء المحاولة مرة أخرى أو التواصل مباشرة على وسائل التواصل الاجتماعي.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال الرسالة ✨';
             }
-            
-            comments.push(newComment);
-            localStorage.setItem('guestbookComments', JSON.stringify(comments));
-            
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('message').value = '';
-            
-            // Show success message
-            const successMsg = document.getElementById('successMsg');
-            successMsg.textContent = 'تم إرسال رسالتك بنجاح! ✅';
-            successMsg.style.display = 'block';
-            setTimeout(function() {
-                successMsg.style.display = 'none';
-            }, 5000);
-            
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'إرسال الرسالة ✨';
-            
-            // Reload comments to show the new one
-            await loadComments();
         }
 
         function escapeHtml(text) {
