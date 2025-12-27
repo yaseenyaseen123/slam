@@ -559,6 +559,44 @@
             transform: scale(1.05);
         }
 
+        /* Clear Cache Button */
+        .clear-cache-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .clear-cache-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        }
+        .clear-cache-btn::before {
+            content: '🔄';
+            font-size: 1.3em;
+            animation: rotate 2s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .clear-cache-btn:active::before {
+            animation: rotate 0.5s linear infinite;
+        }
+
         @media (max-width: 768px) {
             header h1 {
                 font-size: 3.5em;
@@ -588,6 +626,12 @@
             .popup-content p {
                 font-size: 1.2em;
             }
+            .clear-cache-btn {
+                bottom: 20px;
+                left: 20px;
+                padding: 12px 20px;
+                font-size: 1em;
+            }
         }
 
         @media (max-width: 480px) {
@@ -607,6 +651,11 @@
             <button class="popup-close-btn" onclick="closePopup()">ابدأ التصفح</button>
         </div>
     </div>
+
+    <!-- Clear Cache Button -->
+    <button class="clear-cache-btn" onclick="clearCacheAndReload()" title="تحديث الصفحة وحذف الكاش">
+        تحديث الصفحة
+    </button>
 
     <div class="container">
         <header>
@@ -865,6 +914,17 @@
         function closeImagePopup() {
             const popup = document.getElementById('imagePopup');
             popup.classList.remove('active');
+        }
+
+        function clearCacheAndReload() {
+            // Clear cache and reload page
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) caches.delete(name);
+                });
+            }
+            // Force reload without cache
+            window.location.reload(true);
         }
     </script>
 </body>
