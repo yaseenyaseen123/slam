@@ -260,60 +260,36 @@
             }
         }
 
-        async function submitComment(event) {
+        function submitComment(event) {
             event.preventDefault();
             
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
-            const submitBtn = event.target.querySelector('button[type="submit"]');
             
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'جاري الإرسال...';
+            // Create GitHub Issue URL with pre-filled data
+            const issueTitle = encodeURIComponent('رسالة من: ' + name);
+            const issueBody = encodeURIComponent(
+                '**الاسم:** ' + name + '\n' +
+                (email ? '**البريد الإلكتروني:** ' + email + '\n' : '') +
+                '**التاريخ:** ' + new Date().toLocaleDateString('ar-EG') + '\n\n' +
+                '**الرسالة:**\n' + message + '\n\n---\n_تم الإرسال من صفحة بصمات الزوار_'
+            );
             
-            try {
-                // Create GitHub Issue as comment submission
-                const issueTitle = 'رسالة من: ' + name;
-                const issueBody = '**الاسم:** ' + name + '\n' +
-                                 (email ? '**البريد:** ' + email + '\n' : '') +
-                                 '**التاريخ:** ' + new Date().toLocaleDateString('ar-EG') + '\n\n' +
-                                 '**الرسالة:**\n' + message;
-                
-                const response = await fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/issues', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        title: issueTitle,
-                        body: issueBody,
-                        labels: ['guestbook']
-                    })
-                });
-                
-                if (response.status === 201) {
-                    // Clear form
-                    document.getElementById('name').value = '';
-                    document.getElementById('email').value = '';
-                    document.getElementById('message').value = '';
-                    
-                    // Show success message
-                    const successMsg = document.getElementById('successMsg');
-                    successMsg.textContent = 'تم إرسال رسالتك بنجاح! ستظهر بعد المراجعة ✅';
-                    successMsg.style.display = 'block';
-                    setTimeout(function() {
-                        successMsg.style.display = 'none';
-                    }, 5000);
-                } else {
-                    alert('حدث خطأ في إرسال الرسالة. رسالتك: "' + message.substring(0, 50) + '..." - الرجاء نسخها والتواصل مباشرة.');
-                }
-            } catch (error) {
-                alert('حدث خطأ في إرسال الرسالة. الرجاء المحاولة مرة أخرى أو التواصل مباشرة على وسائل التواصل الاجتماعي.');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'إرسال الرسالة ✨';
-            }
+            const githubUrl = 'https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/issues/new?labels=guestbook&title=' + issueTitle + '&body=' + issueBody;
+            
+            // Open GitHub in new tab
+            window.open(githubUrl, '_blank');
+            
+            // Show instructions
+            const successMsg = document.getElementById('successMsg');
+            successMsg.innerHTML = '✅ تم فتح صفحة جديدة! اضغط على "Submit new issue" لإرسال رسالتك.<br>إذا لم تفتح الصفحة، <a href="' + githubUrl + '" target="_blank" style="color: white; text-decoration: underline;">اضغط هنا</a>';
+            successMsg.style.display = 'block';
+            
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
         }
 
         function escapeHtml(text) {
