@@ -255,60 +255,88 @@
 
         <div class="social-grid">
             <div class="social-card instagram">
-                <span class="social-icon">📷</span>
+                <span class="social-icon" id="instagram-icon">📷</span>
                 <h2>Instagram</h2>
                 <p>تابع آخر الأخبار والصور الحصرية من وراء الكواليس</p>
                 <div class="stats-box">
-                    <strong>@salam_hammoud</strong>
+                    <strong id="instagram-username">@salam_hammoud</strong>
                     <span>منشورات يومية | قصص تفاعلية</span>
                 </div>
-                <a href="https://instagram.com/salam_hammoud" target="_blank" class="social-btn">متابعة الآن</a>
+                <a href="https://instagram.com/salam_hammoud" target="_blank" class="social-btn" id="instagram-link">متابعة الآن</a>
             </div>
 
             <div class="social-card tiktok">
-                <span class="social-icon">🎵</span>
+                <span class="social-icon" id="tiktok-icon">🎵</span>
                 <h2>TikTok</h2>
                 <p>محتوى قصير وممتع، نصائح إعلامية ولحظات مميزة</p>
                 <div class="stats-box">
-                    <strong>@salam_hammoud</strong>
+                    <strong id="tiktok-username">@salam_hammoud</strong>
                     <span>فيديوهات قصيرة | ترندات</span>
                 </div>
-                <a href="https://www.tiktok.com/@salam_hammoud" target="_blank" class="social-btn">متابعة الآن</a>
+                <a href="https://www.tiktok.com/@salam_hammoud" target="_blank" class="social-btn" id="tiktok-link">متابعة الآن</a>
             </div>
 
             <div class="social-card youtube">
-                <span class="social-icon">▶️</span>
+                <span class="social-icon" id="youtube-icon">▶️</span>
                 <h2>YouTube</h2>
                 <p>بودكاست مع سلام، لقاءات حصرية ومحتوى متنوع</p>
                 <div class="stats-box">
-                    <strong>Salam Hammoud</strong>
+                    <strong id="youtube-username">Salam Hammoud</strong>
                     <span>حلقات أسبوعية | محتوى حصري</span>
                 </div>
-                <a href="https://youtube.com/@salamhammoud9" target="_blank" class="social-btn">اشترك الآن</a>
+                <a href="https://youtube.com/@salamhammoud9" target="_blank" class="social-btn" id="youtube-link">اشترك الآن</a>
             </div>
 
             <div class="social-card facebook">
-                <span class="social-icon">👥</span>
+                <span class="social-icon" id="facebook-icon">👥</span>
                 <h2>Facebook</h2>
                 <p>انضم لمجتمع متابعي سلام حمود وشارك في النقاشات</p>
                 <div class="stats-box">
-                    <strong>Salam Hammoud</strong>
+                    <strong id="facebook-username">Salam Hammoud</strong>
                     <span>تحديثات يومية | تفاعل مباشر</span>
                 </div>
-                <a href="https://facebook.com/Salam.Hammoud.Anchor" target="_blank" class="social-btn">تابع الصفحة</a>
+                <a href="https://facebook.com/Salam.Hammoud.Anchor" target="_blank" class="social-btn" id="facebook-link">تابع الصفحة</a>
             </div>
 
             <div class="social-card twitter">
-                <span class="social-icon">🐦</span>
+                <span class="social-icon" id="twitter-icon">🐦</span>
                 <h2>Twitter</h2>
                 <p>آراء وأفكار سريعة، تغريدات ملهمة وتحديثات فورية</p>
                 <div class="stats-box">
-                    <strong>@SalamHam</strong>
+                    <strong id="twitter-username">@SalamHam</strong>
                     <span>تغريدات يومية | أخبار عاجلة</span>
                 </div>
-                <a href="https://twitter.com/SalamHam" target="_blank" class="social-btn">تابع الآن</a>
+                <a href="https://twitter.com/SalamHam" target="_blank" class="social-btn" id="twitter-link">تابع الآن</a>
             </div>
         </div>
     </div>
+    
+    <script>
+        // Load social media data from localStorage
+        const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+        
+        if (siteData.social) {
+            // Update icons
+            if (siteData.social.instagram_icon) document.getElementById('instagram-icon').textContent = siteData.social.instagram_icon;
+            if (siteData.social.tiktok_icon) document.getElementById('tiktok-icon').textContent = siteData.social.tiktok_icon;
+            if (siteData.social.youtube_icon) document.getElementById('youtube-icon').textContent = siteData.social.youtube_icon;
+            if (siteData.social.facebook_icon) document.getElementById('facebook-icon').textContent = siteData.social.facebook_icon;
+            if (siteData.social.twitter_icon) document.getElementById('twitter-icon').textContent = siteData.social.twitter_icon;
+            
+            // Update usernames
+            if (siteData.social.instagram_username) document.getElementById('instagram-username').textContent = siteData.social.instagram_username;
+            if (siteData.social.tiktok_username) document.getElementById('tiktok-username').textContent = siteData.social.tiktok_username;
+            if (siteData.social.youtube_username) document.getElementById('youtube-username').textContent = siteData.social.youtube_username;
+            if (siteData.social.facebook_username) document.getElementById('facebook-username').textContent = siteData.social.facebook_username;
+            if (siteData.social.twitter_username) document.getElementById('twitter-username').textContent = siteData.social.twitter_username;
+            
+            // Update links
+            if (siteData.social.instagram) document.getElementById('instagram-link').href = siteData.social.instagram;
+            if (siteData.social.tiktok) document.getElementById('tiktok-link').href = siteData.social.tiktok;
+            if (siteData.social.youtube) document.getElementById('youtube-link').href = siteData.social.youtube;
+            if (siteData.social.facebook) document.getElementById('facebook-link').href = siteData.social.facebook;
+            if (siteData.social.twitter) document.getElementById('twitter-link').href = siteData.social.twitter;
+        }
+    </script>
 </body>
 </html>
