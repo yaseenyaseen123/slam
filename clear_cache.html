@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head><meta charset="UTF-8"><title>مسح الذاكرة المؤقتة</title></head>
+<body style="font-family: Arial; text-align: center; padding: 50px;">
+<h1>🔄 مسح الذاكرة المؤقتة للوحة التحكم</h1>
+<p>اضغط الزر لمسح كل بيانات الموقع المحفوظة ثم ستُفتح لوحة التحكم</p>
+<button onclick="clearAll()" style="padding: 20px 40px; font-size: 18px; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer;">مسح البيانات وفتح اللوحة</button>
+<script>
+function clearAll() {
+    localStorage.clear();
+    sessionStorage.clear();
+    if ('caches' in window) {
+        caches.keys().then(keys => keys.forEach(key => caches.delete(key)));
+    }
+    alert('تم مسح جميع البيانات! سيتم فتح لوحة التحكم الآن');
+    window.location.href = 'https://salam.zone.id/admin.html?t=' + Date.now();
+}
+</script>
+</body>
+</html>
