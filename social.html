@@ -370,5 +370,40 @@
             if (siteData.social.twitter) document.getElementById('twitter-link').href = siteData.social.twitter;
         }
     </script>
+
+    <!-- YouTube Audio Player -->
+    <div id="youtube-player" style="display: none;"></div>
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'a9LS6EgppfU',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'a9LS6EgppfU'
+                },
+                events: {
+                    'onReady': function(event) {
+                        event.target.setVolume(50);
+                        event.target.playVideo();
+                    },
+                    'onStateChange': function(event) {
+                        if (event.data === YT.PlayerState.ENDED) {
+                            player.playVideo();
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
