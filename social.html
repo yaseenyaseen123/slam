@@ -147,6 +147,12 @@
             display: block;
             animation: bounce 2s infinite;
         }
+        .social-icon img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
         .social-card:hover .social-icon {
             animation: spin 0.6s ease;
         }
@@ -322,13 +328,32 @@
             document.head.appendChild(style);
         }
         
+        // Helper function to check if string is a URL
+        function isURL(str) {
+            return str && (str.startsWith('http://') || str.startsWith('https://') || str.startsWith('data:'));
+        }
+        
+        // Helper function to set icon (image or emoji)
+        function setIcon(elementId, iconValue) {
+            const element = document.getElementById(elementId);
+            if (!element || !iconValue) return;
+            
+            if (isURL(iconValue)) {
+                // It's an image URL
+                element.innerHTML = '<img src="' + iconValue + '" alt="icon" />';
+            } else {
+                // It's an emoji or text
+                element.textContent = iconValue;
+            }
+        }
+        
         if (siteData.social) {
-            // Update icons
-            if (siteData.social.instagram_icon) document.getElementById('instagram-icon').textContent = siteData.social.instagram_icon;
-            if (siteData.social.tiktok_icon) document.getElementById('tiktok-icon').textContent = siteData.social.tiktok_icon;
-            if (siteData.social.youtube_icon) document.getElementById('youtube-icon').textContent = siteData.social.youtube_icon;
-            if (siteData.social.facebook_icon) document.getElementById('facebook-icon').textContent = siteData.social.facebook_icon;
-            if (siteData.social.twitter_icon) document.getElementById('twitter-icon').textContent = siteData.social.twitter_icon;
+            // Update icons (support both emoji and image URLs)
+            setIcon('instagram-icon', siteData.social.instagram_icon);
+            setIcon('tiktok-icon', siteData.social.tiktok_icon);
+            setIcon('youtube-icon', siteData.social.youtube_icon);
+            setIcon('facebook-icon', siteData.social.facebook_icon);
+            setIcon('twitter-icon', siteData.social.twitter_icon);
             
             // Update usernames
             if (siteData.social.instagram_username) document.getElementById('instagram-username').textContent = siteData.social.instagram_username;
