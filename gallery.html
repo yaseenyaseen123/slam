@@ -268,15 +268,18 @@
 
         var player;
         function onYouTubeIframeAPIReady() {
+            const savedData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            const videoId = (savedData.basic && savedData.basic.backgroundAudioVideoId) || 'a9LS6EgppfU';
+            
             player = new YT.Player('youtube-player', {
                 height: '0',
                 width: '0',
-                videoId: 'a9LS6EgppfU',
+                videoId: videoId,
                 playerVars: {
                     'autoplay': 1,
                     'controls': 0,
                     'loop': 1,
-                    'playlist': 'a9LS6EgppfU'
+                    'playlist': videoId
                 },
                 events: {
                     'onReady': function(event) {
