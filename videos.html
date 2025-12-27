@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفيديوهات - سلام حمود</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a0572;
+            --secondary-color: #ab20fd;
+            --accent-color: #ff6b6b;
+            --text-color: #fff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('new_background.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4) blur(8px);
+            z-index: -1;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        nav a:hover, nav a.active {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 0;
+            list-style: none;
+        }
+        .video-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        .video-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .video-item iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            display: block;
+        }
+        .video-info {
+            padding: 20px;
+        }
+        .video-item h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+        .video-item p {
+            color: #ddd;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="gallery.html">معرض الصور</a></li>
+            <li><a href="videos.html" class="active">الفيديوهات</a></li>
+            <li><a href="guestbook.html">بصمات الزوار</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>🎬 فيديوهات مختارة</h1>
+        
+        <ul class="video-grid">
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/M9tQ0yM9sLY" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>الإنسان مقيد أم حر؟</h3>
+                    <p>نقاش فلسفي عميق حول الحرية والقيود في حياة الإنسان</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/8Z9SuAR7QJw" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>بودكاست مع سلام - اخترت الشهرة والحرية على التعليم</h3>
+                    <p>حوار مع الدكتورة جنى بو رسلان حول القضايا الاجتماعية</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/83B6pgx2He4" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>لهذا السبب قررت ألا أعمل كموظف - ريكاردو كرم</h3>
+                    <p>حوار ملهم مع الإعلامي ريكاردو كرم حول ريادة الأعمال</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/tPvmdtjuK1w" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>لقاء محمد عساف مع سلام حمود</h3>
+                    <p>لقاء تاريخي مع الفنان محمد عساف على راديو الرابعة وتلفزيون عجمان عام 2014</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/EKf7Ar7hTN4" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>سلام حمود ضيفة برنامج سيلفي</h3>
+                    <p>ظهور سلام حمود في برنامج سيلفي على قناة الظفرة - فقرة المحبة والتسامح</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/yqH2S06nmJw" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>عم تحكي وتتحرك كتير؟ لحظة.. التوقف أحيانًا أقوى من الحركة</h3>
+                    <p>نصائح قيمة حول أهمية التوقف والتأمل في الحياة</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/nKDqPWle6pE" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>الحقيقة القاسية؟ ما حدا مهتم فيك</h3>
+                    <p>فيديو قصير حول فن الخطابة والتواصل مع الجمهور</p>
+                </div>
+            </li>
+            <li class="video-item">
+                <iframe src="https://www.youtube.com/embed/hLCYcLwprQI" allowfullscreen></iframe>
+                <div class="video-info">
+                    <h3>الفنانة باسكال مشعلاني مع سلام حمود</h3>
+                    <p>لقاء مباشر عبر انستقرام راديو الرابعة مع الفنانة باسكال مشعلاني</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

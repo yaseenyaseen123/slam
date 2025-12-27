@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بصمات الزوار - سلام حمود</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a0572;
+            --secondary-color: #ab20fd;
+            --accent-color: #ff6b6b;
+            --text-color: #fff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('new_background.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4) blur(8px);
+            z-index: -1;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        nav a:hover, nav a.active {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .comment-form {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+        }
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+        }
+        .comments-list {
+            list-style: none;
+        }
+        .comment-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        .comment-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .comment-author {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+        .comment-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+        .comment-text {
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .comment-reply {
+            background: rgba(171, 32, 253, 0.2);
+            padding: 15px;
+            border-right: 3px solid var(--secondary-color);
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .reply-label {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .success-msg {
+            background: #2ed573;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="gallery.html">معرض الصور</a></li>
+            <li><a href="videos.html">الفيديوهات</a></li>
+            <li><a href="guestbook.html" class="active">بصمات الزوار</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>💌 بصمات الزوار</h1>
+        <p class="subtitle">اترك رسالتك للمتألقة سلام حمود</p>
+
+        <div class="success-msg" id="successMsg">تم إرسال رسالتك بنجاح! ✅</div>
+
+        <div class="comment-form">
+            <form onsubmit="submitComment(event)">
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input type="text" id="name" placeholder="اسمك الكريم" required>
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني (اختياري)</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>رسالتك</label>
+                    <textarea id="message" placeholder="اكتب رسالتك هنا..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">إرسال الرسالة ✨</button>
+            </form>
+        </div>
+
+        <ul class="comments-list" id="commentsList">
+            <!-- Comments will be loaded here -->
+        </ul>
+    </div>
+
+    <script>
+        // Load comments from localStorage
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('guestbookComments') || '[]');
+            const container = document.getElementById('commentsList');
+            
+            if (comments.length === 0) {
+                container.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 40px;">كن أول من يترك رسالة!</p>';
+                return;
+            }
+            
+            container.innerHTML = comments.map(comment => `
+                <li class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-author">${escapeHtml(comment.name)}</span>
+                        <span class="comment-date">${comment.date}</span>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.message)}</div>
+                    ${comment.reply ? `
+                        <div class="comment-reply">
+                            <span class="reply-label">رد من سلام حمود:</span>
+                            <div>${escapeHtml(comment.reply)}</div>
+                        </div>
+                    ` : ''}
+                </li>
+            `).reverse().join('');
+        }
+
+        function submitComment(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            const comments = JSON.parse(localStorage.getItem('guestbookComments') || '[]');
+            
+            const newComment = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                message: message,
+                date: new Date().toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                reply: null
+            };
+            
+            comments.push(newComment);
+            localStorage.setItem('guestbookComments', JSON.stringify(comments));
+            
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+            
+            // Show success message
+            const successMsg = document.getElementById('successMsg');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+            
+            // Reload comments
+            loadComments();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load comments on page load
+        loadComments();
+    </script>
+</body>
+</html>
