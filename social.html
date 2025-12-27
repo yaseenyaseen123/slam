@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - سلام حمود</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a0572;
+            --secondary-color: #ab20fd;
+            --accent-color: #ff6b6b;
+            --text-color: #fff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('new_background.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4) blur(8px);
+            z-index: -1;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        nav a:hover, nav a.active {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 0.8s ease;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .social-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInScale 0.6s ease;
+            animation-fill-mode: both;
+        }
+        .social-card:nth-child(1) { animation-delay: 0.1s; }
+        .social-card:nth-child(2) { animation-delay: 0.2s; }
+        .social-card:nth-child(3) { animation-delay: 0.3s; }
+        .social-card:nth-child(4) { animation-delay: 0.4s; }
+        .social-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        .social-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+        .social-card:hover::before {
+            left: 100%;
+        }
+        .social-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+        .social-card.instagram:hover {
+            background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+        }
+        .social-card.tiktok:hover {
+            background: linear-gradient(135deg, #000000 0%, #ee1d52 50%, #69c9d0 100%);
+        }
+        .social-card.youtube:hover {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+        }
+        .social-card.facebook:hover {
+            background: linear-gradient(135deg, #1877f2 0%, #0d5dbf 100%);
+        }
+        .social-card.twitter:hover {
+            background: linear-gradient(135deg, #1da1f2 0%, #0c85d0 100%);
+        }
+        .social-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+        .social-card:hover .social-icon {
+            animation: spin 0.6s ease;
+        }
+        .social-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .social-card p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .social-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .stats-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .stats-box strong {
+            display: block;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="gallery.html">معرض الصور</a></li>
+            <li><a href="videos.html">الفيديوهات</a></li>
+            <li><a href="social.html" class="active">تواصل معنا</a></li>
+            <li><a href="guestbook.html">بصمات الزوار</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>📱 تواصل معنا</h1>
+        <p class="subtitle">تابع سلام حمود على منصات التواصل الاجتماعي</p>
+
+        <div class="social-grid">
+            <div class="social-card instagram">
+                <span class="social-icon">📷</span>
+                <h2>Instagram</h2>
+                <p>تابع آخر الأخبار والصور الحصرية من وراء الكواليس</p>
+                <div class="stats-box">
+                    <strong>@salam_hammoud</strong>
+                    <span>منشورات يومية | قصص تفاعلية</span>
+                </div>
+                <a href="https://instagram.com/salam_hammoud" target="_blank" class="social-btn">متابعة الآن</a>
+            </div>
+
+            <div class="social-card tiktok">
+                <span class="social-icon">🎵</span>
+                <h2>TikTok</h2>
+                <p>محتوى قصير وممتع، نصائح إعلامية ولحظات مميزة</p>
+                <div class="stats-box">
+                    <strong>@salam_hammoud</strong>
+                    <span>فيديوهات قصيرة | ترندات</span>
+                </div>
+                <a href="https://www.tiktok.com/@salam_hammoud" target="_blank" class="social-btn">متابعة الآن</a>
+            </div>
+
+            <div class="social-card youtube">
+                <span class="social-icon">▶️</span>
+                <h2>YouTube</h2>
+                <p>بودكاست مع سلام، لقاءات حصرية ومحتوى متنوع</p>
+                <div class="stats-box">
+                    <strong>Salam Hammoud</strong>
+                    <span>حلقات أسبوعية | محتوى حصري</span>
+                </div>
+                <a href="https://youtube.com/@salamhammoud9" target="_blank" class="social-btn">اشترك الآن</a>
+            </div>
+
+            <div class="social-card facebook">
+                <span class="social-icon">👥</span>
+                <h2>Facebook</h2>
+                <p>انضم لمجتمع متابعي سلام حمود وشارك في النقاشات</p>
+                <div class="stats-box">
+                    <strong>Salam Hammoud</strong>
+                    <span>تحديثات يومية | تفاعل مباشر</span>
+                </div>
+                <a href="https://facebook.com/Salam.Hammoud.Anchor" target="_blank" class="social-btn">تابع الصفحة</a>
+            </div>
+
+            <div class="social-card twitter">
+                <span class="social-icon">🐦</span>
+                <h2>Twitter</h2>
+                <p>آراء وأفكار سريعة، تغريدات ملهمة وتحديثات فورية</p>
+                <div class="stats-box">
+                    <strong>@SalamHam</strong>
+                    <span>تغريدات يومية | أخبار عاجلة</span>
+                </div>
+                <a href="https://twitter.com/SalamHam" target="_blank" class="social-btn">تابع الآن</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
