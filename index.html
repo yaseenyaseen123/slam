@@ -709,7 +709,7 @@
     </audio>
     
     <!-- Audio Control Button -->
-    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى">
+    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى" style="display: none;">
         🔇
     </button>
 
@@ -854,8 +854,16 @@
             
             // Update background audio
             if (siteData.basic.backgroundAudio) {
-                console.log('تحميل الصوت من:', siteData.basic.backgroundAudio);
-                audioElement.src = siteData.basic.backgroundAudio;
+                let audioUrl = siteData.basic.backgroundAudio;
+                
+                // Convert Vocaroo URLs if needed (client-side backup)
+                const vocarooMatch = audioUrl.match(/voca\.ro\/([a-zA-Z0-9]+)/);
+                if (vocarooMatch) {
+                    audioUrl = `https://media1.vocaroo.com/mp3/${vocarooMatch[1]}.mp3`;
+                }
+                
+                console.log('تحميل الصوت من:', audioUrl);
+                audioElement.src = audioUrl;
                 audioElement.load();
                 
                 // Show audio button only if audio is set
@@ -864,14 +872,18 @@
                 // Add error handler
                 audioElement.addEventListener('error', function(e) {
                     console.error('خطأ في تحميل الملف الصوتي:', e);
-                    alert('تعذر تحميل الملف الصوتي. تأكد من أن الرابط صحيح ومباشر.');
+                    console.error('الرابط المستخدم:', audioUrl);
+                    alert('تعذر تحميل الملف الصوتي.\nالرابط: ' + audioUrl + '\n\nتأكد من:\n1. صحة الرابط\n2. أنه رابط مباشر لملف MP3\n3. فتح الرابط في متصفح جديد للتأكد');
+                    audioBtn.style.display = 'none';
                 });
                 
                 // Add loaded handler
                 audioElement.addEventListener('loadeddata', function() {
-                    console.log('تم تحميل الملف الصوتي بنجاح!');
+                    console.log('✅ تم تحميل الملف الصوتي بنجاح!');
+                    console.log('مدة الصوت:', audioElement.duration, 'ثانية');
                 });
             } else {
+                console.log('لم يتم تحديد ملف صوتي');
                 // Hide audio button if no audio
                 audioBtn.style.display = 'none';
             }
@@ -911,6 +923,26 @@
                 setTimeout(() => {
                     toggleAudio();
                 }, 500);
+            }
+        }
+        
+        // Clear cache and reload page
+        function clearCacheAndReload() {
+            if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
+                // Clear localStorage
+                localStorage.clear();
+                
+                // Clear cache and reload
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) {
+                            caches.delete(name);
+                        }
+                    });
+                }
+                
+                // Hard reload
+                window.location.reload(true);
             }
         }
         
