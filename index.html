@@ -826,6 +826,11 @@
         // Load custom images from localStorage
         const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
         
+        // Audio control functionality
+        let isPlaying = false;
+        const audioElement = document.getElementById('backgroundAudio');
+        const audioBtn = document.getElementById('audioControlBtn');
+        
         if (siteData.basic) {
             // Update profile image
             if (siteData.basic.profileImage) {
@@ -849,19 +854,35 @@
             
             // Update background audio
             if (siteData.basic.backgroundAudio) {
-                const audio = document.getElementById('backgroundAudio');
-                const source = audio.querySelector('source');
-                source.src = siteData.basic.backgroundAudio;
-                audio.load();
+                console.log('تحميل الصوت من:', siteData.basic.backgroundAudio);
+                audioElement.src = siteData.basic.backgroundAudio;
+                audioElement.load();
+                
+                // Show audio button only if audio is set
+                audioBtn.style.display = 'flex';
+                
+                // Add error handler
+                audioElement.addEventListener('error', function(e) {
+                    console.error('خطأ في تحميل الملف الصوتي:', e);
+                    alert('تعذر تحميل الملف الصوتي. تأكد من أن الرابط صحيح ومباشر.');
+                });
+                
+                // Add loaded handler
+                audioElement.addEventListener('loadeddata', function() {
+                    console.log('تم تحميل الملف الصوتي بنجاح!');
+                });
+            } else {
+                // Hide audio button if no audio
+                audioBtn.style.display = 'none';
             }
         }
         
-        // Audio control functionality
-        let isPlaying = false;
-        const audioElement = document.getElementById('backgroundAudio');
-        const audioBtn = document.getElementById('audioControlBtn');
-        
         function toggleAudio() {
+            if (!audioElement.src) {
+                alert('لم يتم تحديد ملف صوتي. يرجى إضافة رابط الصوت من لوحة التحكم.');
+                return;
+            }
+            
             if (isPlaying) {
                 audioElement.pause();
                 audioBtn.textContent = '🔇';
@@ -872,8 +893,10 @@
                     audioBtn.textContent = '🔊';
                     audioBtn.classList.add('playing');
                     isPlaying = true;
+                    console.log('تم تشغيل الصوت بنجاح!');
                 }).catch(error => {
-                    console.log('تشغيل الصوت يتطلب تفاعل المستخدم:', error);
+                    console.error('خطأ في تشغيل الصوت:', error);
+                    alert('تعذر تشغيل الصوت. قد يحتاج المتصفح للتفاعل أولاً. اضغط على زر الصوت 🔇');
                 });
             }
         }
@@ -883,9 +906,11 @@
             const popup = document.getElementById('welcomePopup');
             popup.classList.remove('active');
             
-            // Try to auto-play audio
-            if (siteData.basic && siteData.basic.backgroundAudio) {
-                toggleAudio();
+            // Try to auto-play audio after user interaction
+            if (siteData.basic && siteData.basic.backgroundAudio && audioElement.src) {
+                setTimeout(() => {
+                    toggleAudio();
+                }, 500);
             }
         }
         
