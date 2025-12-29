@@ -691,8 +691,35 @@
     </style>
 </head>
 <body>
+
+
+    <!-- Welcome Popup -->
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup-content">
+            <h2>🇱🇧أهلاً بك في صفحة الإعلامية سلام حمود</h2>
+            <p>اكتشف مسيرتها الإعلامية وبرامجها المميزة</p>
+            <button class="popup-close-btn" onclick="closePopup()">ابدأ التصفح</button>
+        </div>
+    </div>
+
+    <!-- Clear Cache Button -->
+    <button class="clear-cache-btn" onclick="clearCacheAndReload()" title="تحديث الصفحة وحذف الكاش">
+        تحديث الصفحة
+    </button>
+    
+    <!-- Audio Player -->
+    <audio id="backgroundAudio" loop>
+        <source src="" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت
+    </audio>
+    
+    <!-- Audio Control Button -->
+    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى">
+        🔇
+    </button>
+
     <script>
-        // Global functions - defined immediately
+        // Global functions - defined immediately after buttons
         window.toggleAudio = function() {
             const audioElement = document.getElementById('backgroundAudio');
             const audioBtn = document.getElementById('audioControlBtn');
@@ -748,32 +775,6 @@
             }
         };
     </script>
-
-
-    <!-- Welcome Popup -->
-    <div class="popup-overlay" id="welcomePopup">
-        <div class="popup-content">
-            <h2>🇱🇧أهلاً بك في صفحة الإعلامية سلام حمود</h2>
-            <p>اكتشف مسيرتها الإعلامية وبرامجها المميزة</p>
-            <button class="popup-close-btn" onclick="closePopup()">ابدأ التصفح</button>
-        </div>
-    </div>
-
-    <!-- Clear Cache Button -->
-    <button class="clear-cache-btn" onclick="clearCacheAndReload()" title="تحديث الصفحة وحذف الكاش">
-        تحديث الصفحة
-    </button>
-    
-    <!-- Audio Player -->
-    <audio id="backgroundAudio" loop>
-        <source src="" type="audio/mpeg">
-        متصفحك لا يدعم تشغيل الصوت
-    </audio>
-    
-    <!-- Audio Control Button -->
-    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى">
-        🔇
-    </button>
 
     <nav style="background: rgba(0, 0, 0, 0.5); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
         <ul style="list-style: none; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 0; padding: 0;">
