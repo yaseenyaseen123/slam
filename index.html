@@ -689,9 +689,66 @@
             }
         }
     </style>
-    <script src="app.js?v=20251229-2"></script>
 </head>
 <body>
+    <script>
+        // Global functions - defined immediately
+        window.toggleAudio = function() {
+            const audioElement = document.getElementById('backgroundAudio');
+            const audioBtn = document.getElementById('audioControlBtn');
+            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            
+            if (!audioElement.src || audioElement.src === window.location.href) {
+                const savedAudioUrl = siteData.basic?.backgroundAudio;
+                if (savedAudioUrl) {
+                    let audioUrl = savedAudioUrl;
+                    const vocarooMatch = audioUrl.match(/voca\.ro\/([a-zA-Z0-9]+)/);
+                    if (vocarooMatch) {
+                        audioUrl = 'https://media1.vocaroo.com/mp3/' + vocarooMatch[1] + '.mp3';
+                    }
+                    audioElement.src = audioUrl;
+                    audioElement.load();
+                } else {
+                    alert('لم يتم تحديد ملف صوتي');
+                    return;
+                }
+            }
+            
+            if (audioElement.paused) {
+                audioElement.play().then(function() {
+                    audioBtn.textContent = '🔊';
+                    audioBtn.classList.add('playing');
+                }).catch(function(error) {
+                    alert('تعذر تشغيل الصوت');
+                });
+            } else {
+                audioElement.pause();
+                audioBtn.textContent = '🔇';
+                audioBtn.classList.remove('playing');
+            }
+        };
+        
+        window.closePopup = function() {
+            document.getElementById('welcomePopup').classList.remove('active');
+            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            if (siteData.basic && siteData.basic.backgroundAudio) {
+                setTimeout(function() { window.toggleAudio(); }, 500);
+            }
+        };
+        
+        window.clearCacheAndReload = function() {
+            if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
+                localStorage.clear();
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) { caches.delete(name); }
+                    });
+                }
+                window.location.reload(true);
+            }
+        };
+    </script>
+
 
     <!-- Welcome Popup -->
     <div class="popup-overlay" id="welcomePopup">
@@ -826,6 +883,43 @@
             <p class="footer-text"><span class="heart-icon">❤</span> إهداء من فلسطيني إلى الإعلامية القديرة سلام حمود 🤍</p>
         </footer>
     </div>
+    
+    <script>
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('welcomePopup').classList.add('active');
+            
+            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            const audioElement = document.getElementById('backgroundAudio');
+            const audioBtn = document.getElementById('audioControlBtn');
+            
+            if (siteData.basic) {
+                if (siteData.basic.profileImage) {
+                    const profileImg = document.querySelector('.profile-img');
+                    if (profileImg) profileImg.src = siteData.basic.profileImage;
+                }
+                
+                if (siteData.basic.backgroundImage) {
+                    const style = document.createElement('style');
+                    style.textContent = 'body::before, .popup-content::before { background-image: url(' + siteData.basic.backgroundImage + ') !important; }';
+                    document.head.appendChild(style);
+                }
+                
+                if (siteData.basic.backgroundAudio) {
+                    let audioUrl = siteData.basic.backgroundAudio;
+                    const vocarooMatch = audioUrl.match(/voca\.ro\/([a-zA-Z0-9]+)/);
+                    if (vocarooMatch) {
+                        audioUrl = 'https://media1.vocaroo.com/mp3/' + vocarooMatch[1] + '.mp3';
+                    }
+                    audioElement.src = audioUrl;
+                    audioElement.load();
+                    audioBtn.style.display = 'flex';
+                } else {
+                    audioBtn.style.display = 'none';
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
