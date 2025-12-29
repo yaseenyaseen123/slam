@@ -599,6 +599,41 @@
             font-size: 1.3em;
             animation: rotate 2s linear infinite;
         }
+        
+        /* Audio Control Button */
+        .audio-control-btn {
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .audio-control-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .audio-control-btn.playing {
+            background: linear-gradient(135deg, #2ed573, #26d07c);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        }
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -665,6 +700,17 @@
     <!-- Clear Cache Button -->
     <button class="clear-cache-btn" onclick="clearCacheAndReload()" title="تحديث الصفحة وحذف الكاش">
         تحديث الصفحة
+    </button>
+    
+    <!-- Audio Player -->
+    <audio id="backgroundAudio" loop>
+        <source src="" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت
+    </audio>
+    
+    <!-- Audio Control Button -->
+    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى">
+        🔇
     </button>
 
     <nav style="background: rgba(0, 0, 0, 0.5); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
@@ -776,53 +822,7 @@
         </footer>
     </div>
 
-    <!-- YouTube IFrame API -->
-    <div id="youtube-player" style="display: none;"></div>
-    
     <script>
-        // Load YouTube IFrame API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api?v=" + Date.now();
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            // Get video ID from settings or use default
-            const savedData = JSON.parse(localStorage.getItem('siteData') || '{}');
-            const videoId = (savedData.basic && savedData.basic.backgroundAudioVideoId) || 'a9LS6EgppfU';
-            
-            player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: videoId, // YouTube video ID from settings
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': videoId
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // Set volume to 50%
-            event.target.setVolume(50);
-            // Start playing
-            event.target.playVideo();
-        }
-
-        function onPlayerStateChange(event) {
-            // Keep the video playing
-            if (event.data === YT.PlayerState.ENDED) {
-                player.playVideo();
-            }
-        }
-
         // Load custom images from localStorage
         const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
         
@@ -846,6 +846,47 @@
                 `;
                 document.head.appendChild(style);
             }
+            
+            // Update background audio
+            if (siteData.basic.backgroundAudio) {
+                const audio = document.getElementById('backgroundAudio');
+                const source = audio.querySelector('source');
+                source.src = siteData.basic.backgroundAudio;
+                audio.load();
+            }
+        }
+        
+        // Audio control functionality
+        let isPlaying = false;
+        const audioElement = document.getElementById('backgroundAudio');
+        const audioBtn = document.getElementById('audioControlBtn');
+        
+        function toggleAudio() {
+            if (isPlaying) {
+                audioElement.pause();
+                audioBtn.textContent = '🔇';
+                audioBtn.classList.remove('playing');
+                isPlaying = false;
+            } else {
+                audioElement.play().then(() => {
+                    audioBtn.textContent = '🔊';
+                    audioBtn.classList.add('playing');
+                    isPlaying = true;
+                }).catch(error => {
+                    console.log('تشغيل الصوت يتطلب تفاعل المستخدم:', error);
+                });
+            }
+        }
+        
+        // Auto-play on popup close
+        function closePopup() {
+            const popup = document.getElementById('welcomePopup');
+            popup.classList.remove('active');
+            
+            // Try to auto-play audio
+            if (siteData.basic && siteData.basic.backgroundAudio) {
+                toggleAudio();
+            }
         }
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -853,21 +894,7 @@
             popup.classList.add('active');
         });
 
-        function closePopup() {
-            const popup = document.getElementById('welcomePopup');
-            popup.classList.remove('active');
-        }
 
-        function clearCacheAndReload() {
-            if (confirm('هل تريد تحديث الصفحة وحذف الكاش؟')) {
-                // Clear all cache
-                caches.keys().then(function(names) {
-                    for (let name of names) caches.delete(name);
-                });
-                // Reload page
-                location.reload(true);
-            }
-        }
-    </script></body>
+</body>
 </html>
 
