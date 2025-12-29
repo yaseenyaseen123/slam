@@ -890,9 +890,30 @@
         }
         
         function toggleAudio() {
-            if (!audioElement.src) {
-                alert('لم يتم تحديد ملف صوتي. يرجى إضافة رابط الصوت من لوحة التحكم.');
-                return;
+            console.log('تم الضغط على زر الصوت');
+            console.log('الرابط الحالي:', audioElement.src);
+            console.log('siteData:', siteData);
+            
+            if (!audioElement.src || audioElement.src === window.location.href) {
+                const savedAudioUrl = siteData.basic?.backgroundAudio;
+                console.log('الرابط المحفوظ:', savedAudioUrl);
+                
+                if (savedAudioUrl) {
+                    // Convert Vocaroo if needed
+                    let audioUrl = savedAudioUrl;
+                    const vocarooMatch = audioUrl.match(/voca\.ro\/([a-zA-Z0-9]+)/);
+                    if (vocarooMatch) {
+                        audioUrl = `https://media1.vocaroo.com/mp3/${vocarooMatch[1]}.mp3`;
+                        console.log('تم التحويل إلى:', audioUrl);
+                    }
+                    
+                    audioElement.src = audioUrl;
+                    audioElement.load();
+                    console.log('تم تحميل الصوت من:', audioUrl);
+                } else {
+                    alert('لم يتم تحديد ملف صوتي.\n\nالخطوات:\n1. افتح لوحة التحكم (admin.html)\n2. اذهب لتبويب "المعلومات الأساسية"\n3. في حقل "موسيقى الخلفية" الصق الرابط\n4. اضغط "حفظ التغييرات"\n5. حدّث هذه الصفحة');
+                    return;
+                }
             }
             
             if (isPlaying) {
@@ -900,15 +921,17 @@
                 audioBtn.textContent = '🔇';
                 audioBtn.classList.remove('playing');
                 isPlaying = false;
+                console.log('تم إيقاف الصوت');
             } else {
+                console.log('محاولة تشغيل الصوت...');
                 audioElement.play().then(() => {
                     audioBtn.textContent = '🔊';
                     audioBtn.classList.add('playing');
                     isPlaying = true;
-                    console.log('تم تشغيل الصوت بنجاح!');
+                    console.log('✅ تم تشغيل الصوت بنجاح!');
                 }).catch(error => {
-                    console.error('خطأ في تشغيل الصوت:', error);
-                    alert('تعذر تشغيل الصوت. قد يحتاج المتصفح للتفاعل أولاً. اضغط على زر الصوت 🔇');
+                    console.error('❌ خطأ في تشغيل الصوت:', error);
+                    alert('تعذر تشغيل الصوت:\n' + error.message + '\n\nجرب:\n1. تأكد من صحة الرابط\n2. افتح الرابط في متصفح جديد للتأكد\n3. جرب ملف صوتي آخر');
                 });
             }
         }
