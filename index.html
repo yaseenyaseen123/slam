@@ -698,12 +698,12 @@
         <div class="popup-content">
             <h2>🇱🇧أهلاً بك في صفحة الإعلامية سلام حمود</h2>
             <p>اكتشف مسيرتها الإعلامية وبرامجها المميزة</p>
-            <button class="popup-close-btn" onclick="closePopup()">ابدأ التصفح</button>
+            <button class="popup-close-btn" id="closePopupBtn">ابدأ التصفح</button>
         </div>
     </div>
 
     <!-- Clear Cache Button -->
-    <button class="clear-cache-btn" onclick="clearCacheAndReload()" title="تحديث الصفحة وحذف الكاش">
+    <button class="clear-cache-btn" id="clearCacheBtn" title="تحديث الصفحة وحذف الكاش">
         تحديث الصفحة
     </button>
     
@@ -714,13 +714,13 @@
     </audio>
     
     <!-- Audio Control Button -->
-    <button class="audio-control-btn" id="audioControlBtn" onclick="toggleAudio()" title="تشغيل/إيقاف الموسيقى">
+    <button class="audio-control-btn" id="audioControlBtn" title="تشغيل/إيقاف الموسيقى">
         🔇
     </button>
 
     <script>
         // Global functions - defined immediately after buttons
-        window.toggleAudio = function() {
+        function toggleAudioFunc() {
             const audioElement = document.getElementById('backgroundAudio');
             const audioBtn = document.getElementById('audioControlBtn');
             const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
@@ -753,17 +753,17 @@
                 audioBtn.textContent = '🔇';
                 audioBtn.classList.remove('playing');
             }
-        };
+        }
         
-        window.closePopup = function() {
+        function closePopupFunc() {
             document.getElementById('welcomePopup').classList.remove('active');
             const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
             if (siteData.basic && siteData.basic.backgroundAudio) {
-                setTimeout(function() { window.toggleAudio(); }, 500);
+                setTimeout(function() { toggleAudioFunc(); }, 500);
             }
-        };
+        }
         
-        window.clearCacheAndReload = function() {
+        function clearCacheAndReloadFunc() {
             if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
                 localStorage.clear();
                 if ('caches' in window) {
@@ -773,7 +773,12 @@
                 }
                 window.location.reload(true);
             }
-        };
+        }
+        
+        // Attach event listeners
+        document.getElementById('audioControlBtn').addEventListener('click', toggleAudioFunc);
+        document.getElementById('clearCacheBtn').addEventListener('click', clearCacheAndReloadFunc);
+        document.getElementById('closePopupBtn').addEventListener('click', closePopupFunc);
     </script>
 
     <nav style="background: rgba(0, 0, 0, 0.5); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
