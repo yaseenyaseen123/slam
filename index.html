@@ -826,10 +826,10 @@
         // Load custom images from localStorage
         const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
         
-        // Audio control functionality
-        let isPlaying = false;
-        const audioElement = document.getElementById('backgroundAudio');
-        const audioBtn = document.getElementById('audioControlBtn');
+        // Audio control functionality - make global
+        window.isPlaying = false;
+        window.audioElement = document.getElementById('backgroundAudio');
+        window.audioBtn = document.getElementById('audioControlBtn');
         
         if (siteData.basic) {
             // Update profile image
@@ -889,7 +889,7 @@
             }
         }
         
-        function toggleAudio() {
+        window.toggleAudio = function() {
             console.log('تم الضغط على زر الصوت');
             console.log('الرابط الحالي:', audioElement.src);
             console.log('siteData:', siteData);
@@ -916,41 +916,41 @@
                 }
             }
             
-            if (isPlaying) {
+                if (isPlaying) {
                 audioElement.pause();
                 audioBtn.textContent = '🔇';
                 audioBtn.classList.remove('playing');
-                isPlaying = false;
+                window.isPlaying = false;
                 console.log('تم إيقاف الصوت');
             } else {
                 console.log('محاولة تشغيل الصوت...');
                 audioElement.play().then(() => {
                     audioBtn.textContent = '🔊';
                     audioBtn.classList.add('playing');
-                    isPlaying = true;
+                    window.isPlaying = true;
                     console.log('✅ تم تشغيل الصوت بنجاح!');
                 }).catch(error => {
                     console.error('❌ خطأ في تشغيل الصوت:', error);
                     alert('تعذر تشغيل الصوت:\n' + error.message + '\n\nجرب:\n1. تأكد من صحة الرابط\n2. افتح الرابط في متصفح جديد للتأكد\n3. جرب ملف صوتي آخر');
                 });
             }
-        }
+        };
         
-        // Auto-play on popup close
-        function closePopup() {
+        // Auto-play on popup close - global
+        window.closePopup = function() {
             const popup = document.getElementById('welcomePopup');
             popup.classList.remove('active');
             
             // Try to auto-play audio after user interaction
             if (siteData.basic && siteData.basic.backgroundAudio && audioElement.src) {
                 setTimeout(() => {
-                    toggleAudio();
+                    window.toggleAudio();
                 }, 500);
             }
-        }
+        };
         
-        // Clear cache and reload page
-        function clearCacheAndReload() {
+        // Clear cache and reload page - global
+        window.clearCacheAndReload = function() {
             if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
                 // Clear localStorage
                 localStorage.clear();
@@ -967,7 +967,7 @@
                 // Hard reload
                 window.location.reload(true);
             }
-        }
+        };
         
         document.addEventListener('DOMContentLoaded', function() {
             const popup = document.getElementById('welcomePopup');
