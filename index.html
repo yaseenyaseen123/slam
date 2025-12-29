@@ -688,6 +688,90 @@
     </style>
 </head>
 <body>
+    <script>
+        // Define global functions immediately
+        window.isPlaying = false;
+        
+        window.toggleAudio = function() {
+            const audioElement = document.getElementById('backgroundAudio');
+            const audioBtn = document.getElementById('audioControlBtn');
+            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            
+            console.log('تم الضغط على زر الصوت');
+            console.log('الرابط الحالي:', audioElement.src);
+            
+            if (!audioElement.src || audioElement.src === window.location.href) {
+                const savedAudioUrl = siteData.basic?.backgroundAudio;
+                console.log('الرابط المحفوظ:', savedAudioUrl);
+                
+                if (savedAudioUrl) {
+                    let audioUrl = savedAudioUrl;
+                    const vocarooMatch = audioUrl.match(/voca\.ro\/([a-zA-Z0-9]+)/);
+                    if (vocarooMatch) {
+                        audioUrl = `https://media1.vocaroo.com/mp3/${vocarooMatch[1]}.mp3`;
+                        console.log('تم التحويل إلى:', audioUrl);
+                    }
+                    
+                    audioElement.src = audioUrl;
+                    audioElement.load();
+                    console.log('تم تحميل الصوت من:', audioUrl);
+                } else {
+                    alert('لم يتم تحديد ملف صوتي.\n\nالخطوات:\n1. افتح لوحة التحكم (admin.html)\n2. اذهب لتبويب "المعلومات الأساسية"\n3. في حقل "موسيقى الخلفية" الصق الرابط\n4. اضغط "حفظ التغييرات"\n5. حدّث هذه الصفحة');
+                    return;
+                }
+            }
+            
+            if (window.isPlaying) {
+                audioElement.pause();
+                audioBtn.textContent = '🔇';
+                audioBtn.classList.remove('playing');
+                window.isPlaying = false;
+                console.log('تم إيقاف الصوت');
+            } else {
+                console.log('محاولة تشغيل الصوت...');
+                audioElement.play().then(() => {
+                    audioBtn.textContent = '🔊';
+                    audioBtn.classList.add('playing');
+                    window.isPlaying = true;
+                    console.log('✅ تم تشغيل الصوت بنجاح!');
+                }).catch(error => {
+                    console.error('❌ خطأ في تشغيل الصوت:', error);
+                    alert('تعذر تشغيل الصوت:\n' + error.message);
+                });
+            }
+        };
+        
+        window.closePopup = function() {
+            const popup = document.getElementById('welcomePopup');
+            popup.classList.remove('active');
+            
+            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            const audioElement = document.getElementById('backgroundAudio');
+            
+            if (siteData.basic && siteData.basic.backgroundAudio && audioElement.src) {
+                setTimeout(() => {
+                    window.toggleAudio();
+                }, 500);
+            }
+        };
+        
+        window.clearCacheAndReload = function() {
+            if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
+                localStorage.clear();
+                
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) {
+                            caches.delete(name);
+                        }
+                    });
+                }
+                
+                window.location.reload(true);
+            }
+        };
+    </script>
+
     <!-- Welcome Popup -->
     <div class="popup-overlay" id="welcomePopup">
         <div class="popup-content">
