@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تواصل معنا - سلام حمود</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap?v=20251229" rel="stylesheet">
     <style>
         :root {
             --primary-color: #6a0572;
@@ -318,15 +318,7 @@
     </div>
     
     <script>
-        // Load social media data from localStorage
-        const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
-        
-        // Update background image
-        if (siteData.basic && siteData.basic.backgroundImage) {
-            const style = document.createElement('style');
-            style.textContent = `body::before { background-image: url('${siteData.basic.backgroundImage}') !important; }`;
-            document.head.appendChild(style);
-        }
+        // الخلفية وروابط التواصل يتم ضبطها من HTML فقط، لا تعتمد على localStorage
         
         // Helper function to check if string is a URL
         function isURL(str) {

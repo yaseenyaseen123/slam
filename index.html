@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>سلام حمود - الإعلامية القديرة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap?v=20251229" rel="stylesheet">
     <style>
         :root {
             --primary-color: #6a0572; /* Deep Purple */
@@ -723,7 +723,7 @@
         function toggleAudioFunc() {
             const audioElement = document.getElementById('backgroundAudio');
             const audioBtn = document.getElementById('audioControlBtn');
-            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
+            // لم يعد هناك siteData من localStorage، استخدم src مباشرة من العنصر
             
             if (!audioElement.src || audioElement.src === window.location.href) {
                 const savedAudioUrl = siteData.basic?.backgroundAudio;
@@ -757,22 +757,11 @@
         
         function closePopupFunc() {
             document.getElementById('welcomePopup').classList.remove('active');
-            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
-            if (siteData.basic && siteData.basic.backgroundAudio) {
-                setTimeout(function() { toggleAudioFunc(); }, 500);
-            }
+            setTimeout(function() { toggleAudioFunc(); }, 500);
         }
         
         function clearCacheAndReloadFunc() {
-            if (confirm('سيتم حذف الكاش وتحديث الصفحة. هل تريد المتابعة؟')) {
-                localStorage.clear();
-                if ('caches' in window) {
-                    caches.keys().then(function(names) {
-                        for (let name of names) { caches.delete(name); }
-                    });
-                }
-                window.location.reload(true);
-            }
+            window.location.reload(true);
         }
         
         // Attach event listeners
@@ -894,10 +883,8 @@
         // Initialize on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('welcomePopup').classList.add('active');
-            
-            const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
-            const audioElement = document.getElementById('backgroundAudio');
-            const audioBtn = document.getElementById('audioControlBtn');
+            // لم يعد هناك تحميل بيانات من localStorage
+            // الصوت والخلفية يتم ضبطهم من HTML مباشرة
             
             if (siteData.basic) {
                 if (siteData.basic.profileImage) {

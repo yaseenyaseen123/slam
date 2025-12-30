@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الفيديوهات - سلام حمود</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap?v=20251229" rel="stylesheet">
     <style>
         :root {
             --primary-color: #6a0572;
@@ -187,13 +187,7 @@
         </ul>
     </div>
     <script>
-        // Load background image from localStorage
-        const siteData = JSON.parse(localStorage.getItem('siteData') || '{}');
-        if (siteData.basic && siteData.basic.backgroundImage) {
-            const style = document.createElement('style');
-            style.textContent = `body::before { background-image: url('${siteData.basic.backgroundImage}') !important; }`;
-            document.head.appendChild(style);
-        }
+        // الخلفية يتم ضبطها من CSS أو HTML فقط، لا تعتمد على localStorage
     </script>
 </body>
 </html>
