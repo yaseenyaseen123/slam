@@ -511,6 +511,20 @@
     </div>
 
     <script>
+    // يجب أن تكون أول دالة في السكربت
+function logMsg(msg) {
+    let logDiv = document.getElementById('publishLog');
+    if (!logDiv) {
+        // إنشاء سجل إذا لم يوجد
+        const box = document.createElement('div');
+        box.innerHTML = '<label style="font-weight:bold;">سجل النشر:</label><br><textarea id="publishLog" style="width:100%;height:120px;direction:ltr;font-family:monospace;"></textarea>';
+        box.style = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#333;padding:10px 15px 5px 15px;border-radius:10px;z-index:9999;box-shadow:0 2px 10px rgba(0,0,0,0.1);min-width:320px;max-width:90vw;';
+        document.body.appendChild(box);
+        logDiv = document.getElementById('publishLog');
+    }
+    logDiv.value += (msg + '\n');
+    logDiv.scrollTop = logDiv.scrollHeight;
+}
 
         // تعريف publishToGitHub كـ alias لدالة exportWebsite
         function publishToGitHub() {
@@ -520,6 +534,11 @@
         // تعريف المتغيرات الأساسية مرة واحدة فقط في الأعلى
 
                 function renderOldWorks() {
+                    // تحميل آخر نسخة من siteData من localStorage
+            const saved = localStorage.getItem('siteData');
+            if (saved) {
+                try { siteData = JSON.parse(saved); } catch(e) {}
+            }
                     const container = document.getElementById('oldWorksList');
                     if (!container) return;
                     container.innerHTML = '';
@@ -542,7 +561,7 @@
                     siteData.oldWorks.push({ title, description });
                     localStorage.setItem('siteData', JSON.stringify(siteData));
                     renderOldWorks();
-                    exportWebsite();
+                    exportWebsite(); // نشر تلقائي
                 }
 
                 function deleteOldWork(index) {
@@ -550,7 +569,7 @@
                         siteData.oldWorks.splice(index, 1);
                         localStorage.setItem('siteData', JSON.stringify(siteData));
                         renderOldWorks();
-                        exportWebsite();
+                        exportWebsite(); // نشر تلقائي
                     }
                 }
         // Password (يمكن تغييره من هنا)
@@ -668,20 +687,27 @@
         // Load saved data
 
         async function loadData() {
-            try {
-                const res = await fetch('https://raw.githubusercontent.com/yaseenyaseen123/slam/main/comments.json');
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && typeof data === 'object' && Object.keys(data).length > 0) {
-                        siteData = data;
-                        localStorage.setItem('siteData', JSON.stringify(siteData));
-                    }
-                }
-            } catch (e) {
-                // إذا فشل التحميل من GitHub استخدم البيانات من localStorage
-                const saved = localStorage.getItem('siteData');
-                if (saved) {
+            // أولاً: إذا هناك بيانات محفوظة محلياً استخدمها دائماً
+            const saved = localStorage.getItem('siteData');
+            if (saved) {
+                try {
                     siteData = JSON.parse(saved);
+                } catch (e) {
+                    logMsg('تعذر قراءة البيانات المحفوظة، سيتم استخدام البيانات الافتراضية.');
+                }
+            } else {
+                // إذا لم توجد بيانات محلية، حاول جلبها من GitHub
+                try {
+                    const res = await fetch('https://raw.githubusercontent.com/yaseenyaseen123/slam/main/comments.json');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+                            siteData = data;
+                            localStorage.setItem('siteData', JSON.stringify(siteData));
+                        }
+                    }
+                } catch (e) {
+                    logMsg('تعذر تحميل البيانات من GitHub، سيتم استخدام البيانات الافتراضية.');
                 }
             }
             populateFields();
@@ -693,6 +719,11 @@
         }
 
         function populateFields() {
+            // تحميل آخر نسخة من siteData من localStorage
+            const saved = localStorage.getItem('siteData');
+            if (saved) {
+                try { siteData = JSON.parse(saved); } catch(e) {}
+            }
             document.getElementById('name').value = siteData.basic.name;
             document.getElementById('subtitle').value = siteData.basic.subtitle;
             document.getElementById('description').value = siteData.basic.description;
@@ -756,6 +787,11 @@
 
         // Render Programs
         function renderPrograms() {
+            // تحميل آخر نسخة من siteData من localStorage
+            const saved = localStorage.getItem('siteData');
+            if (saved) {
+                try { siteData = JSON.parse(saved); } catch(e) {}
+            }
             const container = document.getElementById('programsList');
             container.innerHTML = '';
             siteData.programs.forEach((program, index) => {
@@ -773,6 +809,11 @@
 
         // Render Info Cards
         function renderInfoCards() {
+            // تحميل آخر نسخة من siteData من localStorage
+            const saved = localStorage.getItem('siteData');
+            if (saved) {
+                try { siteData = JSON.parse(saved); } catch(e) {}
+            }
             const container = document.getElementById('infoCardsList');
             if (!container) return;
             container.innerHTML = '';
@@ -868,16 +909,14 @@
             siteData.basic.description = document.getElementById('description').value;
             siteData.basic.profileImage = document.getElementById('profileImage').value;
             siteData.basic.backgroundImage = document.getElementById('backgroundImage').value;
-            
-            // Convert Vocaroo URL to direct link
             let audioUrl = document.getElementById('backgroundAudio').value.trim();
             if (audioUrl) {
                 audioUrl = convertVocarooToDirect(audioUrl);
             }
             siteData.basic.backgroundAudio = audioUrl;
-            
             localStorage.setItem('siteData', JSON.stringify(siteData));
             autoPublishAfterSave();
+            exportWebsite(); // نشر تلقائي
         }
         
         // Convert Vocaroo URL to direct MP3 link
@@ -904,23 +943,19 @@
             siteData.social.youtube = document.getElementById('youtube').value;
             siteData.social.facebook = document.getElementById('facebook').value;
             siteData.social.twitter = document.getElementById('twitter').value;
-            
-            // Save icons
             siteData.social.instagram_icon = document.getElementById('instagram_icon').value;
             siteData.social.tiktok_icon = document.getElementById('tiktok_icon').value;
             siteData.social.youtube_icon = document.getElementById('youtube_icon').value;
             siteData.social.facebook_icon = document.getElementById('facebook_icon').value;
             siteData.social.twitter_icon = document.getElementById('twitter_icon').value;
-            
-            // Save usernames
             siteData.social.instagram_username = document.getElementById('instagram_username').value;
             siteData.social.tiktok_username = document.getElementById('tiktok_username').value;
             siteData.social.youtube_username = document.getElementById('youtube_username').value;
             siteData.social.facebook_username = document.getElementById('facebook_username').value;
             siteData.social.twitter_username = document.getElementById('twitter_username').value;
-            
             localStorage.setItem('siteData', JSON.stringify(siteData));
             autoPublishAfterSave();
+            exportWebsite(); // نشر تلقائي
         }
 
         function showSuccess() {
@@ -972,13 +1007,43 @@
                 const updateResult = await updateResponse.json();
                 if (!updateResponse.ok) {
                     console.error('GitHub update error:', updateResult);
-                    alert('فشل حفظ البيانات في GitHub!\n' + (updateResult.message || JSON.stringify(updateResult)));
+                    showCopyableError('فشل حفظ البيانات في GitHub!\n' + (updateResult.message || JSON.stringify(updateResult)));
                 } else {
                     console.log('GitHub update success:', updateResult);
                 }
             } catch (e) {
                 console.error('GitHub publish exception:', e);
-                alert('حدث خطأ أثناء حفظ البيانات في GitHub: ' + (e.message || e));
+                showCopyableError('حدث خطأ أثناء حفظ البيانات في GitHub: ' + (e.message || e));
+
+                    // دالة عرض رسالة خطأ مع زر نسخ
+                    function showCopyableError(msg) {
+                        // إزالة أي رسالة سابقة
+                        let old = document.getElementById('copyableErrorBox');
+                        if (old) old.remove();
+                        // إنشاء العنصر
+                        const box = document.createElement('div');
+                        box.id = 'copyableErrorBox';
+                        box.style = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#ff4757;color:#fff;padding:20px 20px 10px 20px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);min-width:320px;max-width:90vw;direction:ltr;text-align:left;';
+                        box.innerHTML = `
+                            <div style="font-weight:bold;font-size:18px;margin-bottom:8px;direction:rtl;text-align:right;">⚠️ حدث خطأ أثناء الحفظ</div>
+                            <textarea id="errorTextToCopy" style="width:100%;height:70px;direction:ltr;font-family:monospace;font-size:14px;resize:vertical;">${msg}</textarea>
+                            <button onclick="copyErrorText()" style="margin-top:8px;background:#fff;color:#ff4757;font-weight:bold;padding:6px 18px;border:none;border-radius:6px;cursor:pointer;">نسخ نص الخطأ</button>
+                            <button onclick="this.parentNode.remove()" style="margin-top:8px;margin-right:8px;background:#eee;color:#333;padding:6px 18px;border:none;border-radius:6px;cursor:pointer;">إغلاق</button>
+                        `;
+                        document.body.appendChild(box);
+                    }
+
+                    // دالة نسخ نص الخطأ
+                    function copyErrorText() {
+                        const txt = document.getElementById('errorTextToCopy');
+                        txt.select();
+                        txt.setSelectionRange(0, 99999);
+                        document.execCommand('copy');
+                        // رسالة تأكيد صغيرة
+                        const btn = event.target;
+                        btn.textContent = '✔ تم النسخ';
+                        setTimeout(() => { btn.textContent = 'نسخ نص الخطأ'; }, 1500);
+                    }
             }
             try {
                 const statusMsg = document.getElementById('successMsg');
@@ -1185,12 +1250,26 @@
                 setTimeout(() => statusMsg.style.display = 'none', 10000);
 
             } catch (error) {
+                // logMsg قد لا تكون معرفة إذا حدث خطأ قبل تعريفها، لذا نعيد تعريفها هنا احتياطياً
+                if (typeof logMsg !== 'function') {
+                    window.logMsg = function(msg) {
+                        let logDiv = document.getElementById('publishLog');
+                        if (!logDiv) {
+                            const box = document.createElement('div');
+                            box.innerHTML = '<label style="font-weight:bold;">سجل النشر:</label><br><textarea id="publishLog" style="width:100%;height:120px;direction:ltr;font-family:monospace;"></textarea>';
+                            document.body.appendChild(box);
+                            logDiv = document.getElementById('publishLog');
+                        }
+                        logDiv.value += (msg + '\n');
+                        logDiv.scrollTop = logDiv.scrollHeight;
+                    }
+                }
+                logMsg('❌ Publishing error: ' + error.message);
                 console.error('Publishing Error:', error);
                 const statusMsg = document.getElementById('successMsg');
                 statusMsg.innerHTML = 'Publishing error: ' + error.message;
                 statusMsg.style.background = '#ff4757';
                 statusMsg.style.display = 'block';
-                
                 // Keep error message visible longer
                 setTimeout(() => statusMsg.style.display = 'none', 15000);
             }
@@ -1331,12 +1410,35 @@
                 console.log('Updated audio URL to:', audioUrl);
             }
             
-            // Final validation
-            if (updatedHTML.length < 1000 || !updatedHTML.includes('<!DOCTYPE html>')) {
-                throw new Error('فشل إنشاء HTML - المحتوى غير كامل');
-            }
-            
-            return updatedHTML;
+                        // تحديث social icons في social.html إذا كان الملف هو social.html
+                        if (FILE_PATH === 'social.html') {
+                                // تحديث كود جافاسكريبت الخاص بالأيقونات
+                                updatedHTML = updatedHTML.replace(
+                                    /(setIcon\('instagram-icon', )(siteData\.social\.instagram_icon)(\);)/,
+                                    `$1'${siteData.social.instagram_icon || ''}'$3`
+                                );
+                                updatedHTML = updatedHTML.replace(
+                                    /(setIcon\('tiktok-icon', )(siteData\.social\.tiktok_icon)(\);)/,
+                                    `$1'${siteData.social.tiktok_icon || ''}'$3`
+                                );
+                                updatedHTML = updatedHTML.replace(
+                                    /(setIcon\('youtube-icon', )(siteData\.social\.youtube_icon)(\);)/,
+                                    `$1'${siteData.social.youtube_icon || ''}'$3`
+                                );
+                                updatedHTML = updatedHTML.replace(
+                                    /(setIcon\('facebook-icon', )(siteData\.social\.facebook_icon)(\);)/,
+                                    `$1'${siteData.social.facebook_icon || ''}'$3`
+                                );
+                                updatedHTML = updatedHTML.replace(
+                                    /(setIcon\('twitter-icon', )(siteData\.social\.twitter_icon)(\);)/,
+                                    `$1'${siteData.social.twitter_icon || ''}'$3`
+                                );
+                        }
+                        // Final validation
+                        if (updatedHTML.length < 1000 || !updatedHTML.includes('<!DOCTYPE html>')) {
+                                throw new Error('فشل إنشاء HTML - المحتوى غير كامل');
+                        }
+                        return updatedHTML;
         }
 
         function generateHTML() {
@@ -1351,32 +1453,28 @@
             if (!title) return;
             const description = prompt('وصف البرنامج:');
             const note = prompt('ملاحظة (اختياري):') || '';
-            
             siteData.programs.push({ title, description, note });
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderPrograms();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
-
         function editProgram(index) {
             const program = siteData.programs[index];
             const title = prompt('عنوان البرنامج:', program.title);
             if (!title) return;
             const description = prompt('وصف البرنامج:', program.description);
             const note = prompt('ملاحظة (اختياري):', program.note) || '';
-            
             siteData.programs[index] = { title, description, note };
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderPrograms();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
-
         function deleteProgram(index) {
             if (confirm('هل أنت متأكد من حذف هذا البرنامج؟')) {
                 siteData.programs.splice(index, 1);
                 localStorage.setItem('siteData', JSON.stringify(siteData));
                 renderPrograms();
-                exportWebsite();
+                exportWebsite(); // نشر تلقائي
             }
         }
 
@@ -1387,13 +1485,11 @@
             if (!title) return;
             const content = prompt('محتوى البطاقة:');
             if (!content) return;
-            
             siteData.infoCards.push({ icon, title, content });
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderInfoCards();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
-
         function editInfoCard(index) {
             const card = siteData.infoCards[index];
             const icon = prompt('أيقونة البطاقة (emoji):', card.icon);
@@ -1402,19 +1498,17 @@
             if (title === null) return;
             const content = prompt('محتوى البطاقة:', card.content);
             if (content === null) return;
-            
             siteData.infoCards[index] = { icon: icon || card.icon, title: title || card.title, content: content || card.content };
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderInfoCards();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
-
         function deleteInfoCard(index) {
             if (confirm('هل أنت متأكد من حذف هذه البطاقة؟')) {
                 siteData.infoCards.splice(index, 1);
                 localStorage.setItem('siteData', JSON.stringify(siteData));
                 renderInfoCards();
-                exportWebsite();
+                exportWebsite(); // نشر تلقائي
             }
         }
 
@@ -1425,7 +1519,7 @@
             siteData.gallery.push(url);
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderGallery();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
 
         function deleteGalleryImage(index) {
@@ -1433,7 +1527,7 @@
                 siteData.gallery.splice(index, 1);
                 localStorage.setItem('siteData', JSON.stringify(siteData));
                 renderGallery();
-                exportWebsite();
+                exportWebsite(); // نشر تلقائي
             }
         }
 
@@ -1446,7 +1540,7 @@
             siteData.videos.push({ id, title, description });
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderVideos();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
 
         function editVideo(index) {
@@ -1459,7 +1553,7 @@
             siteData.videos[index] = { id, title, description };
             localStorage.setItem('siteData', JSON.stringify(siteData));
             renderVideos();
-            exportWebsite();
+            exportWebsite(); // نشر تلقائي
         }
 
         function deleteVideo(index) {
@@ -1467,7 +1561,7 @@
                 siteData.videos.splice(index, 1);
                 localStorage.setItem('siteData', JSON.stringify(siteData));
                 renderVideos();
-                exportWebsite();
+                exportWebsite(); // نشر تلقائي
             }
                 // دالة نشر تلقائي بعد أي عملية حفظ/تعديل/حذف
                 function autoPublishAfterSave() {
@@ -1622,7 +1716,6 @@
                         console.error('syncCommentsToGitHub error:', e);
                     }
                 }
-        }
         
         // Alias for compatibility
         function loadComments() {

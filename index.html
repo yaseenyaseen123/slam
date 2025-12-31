@@ -376,13 +376,7 @@
                 font-size: 2em;
             }
         }
-            font-size: 1.5em;
-            line-height: 1;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
+        /* تم حذف خصائص غير منتمية لأي محدد هنا */
         .download-link {
             position: absolute;
             bottom: 10px;
@@ -636,7 +630,6 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        }
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -811,11 +804,12 @@
 
     <nav style="background: rgba(0, 0, 0, 0.5); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
         <ul style="list-style: none; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 0; padding: 0;">
-            <li><a href="index.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold; background: var(--accent-color);">الرئيسية</a></li>
-            <li><a href="gallery.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">معرض الصور</a></li>
-            <li><a href="videos.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">الفيديوهات</a></li>
-            <li><a href="social.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">تواصل معنا</a></li>
-            <li><a href="guestbook.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">بصمات الزوار</a></li>
+            <li><a href="docs/index.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold; background: var(--accent-color);">الرئيسية</a></li>
+            <li><a href="docs/gallery.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">معرض الصور</a></li>
+            <li><a href="docs/videos.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">الفيديوهات</a></li>
+            <li><a href="docs/social.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">تواصل معنا</a></li>
+            <li><a href="docs/guestbook.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">بصمات الزوار</a></li>
+            <li><a href="docs/oldworks.html" style="color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s; font-weight: bold;">الأعمال السابقة والبرامج القديمة</a></li>
         </ul>
     </nav>
 
@@ -884,38 +878,11 @@
 
         <section>
             <h2>أعمال سابقة وبرامج قديمة</h2>
-            <ul class="program-list">
-                <li>
-                    <h3>برنامج سيلفي (ضيفة)</h3>
-                    <p>ظهرت سلام حمود كضيفة في برنامج سيلفي على قناة الظفرة، في فقرة المحبة والتسامح (الحلقة الأولى من الموسم الثاني).</p>
-                    <p></p>
-                </li>
-                <li>
-                    <h3>برنامج كيدز كلوب</h3>
-                    <p> برنامج للأطفال كانت تقدمه سلام حمود على راديو الرابعة، يهدف إلى نشر المعلومه المبسطه و الحب والفرح بين الأطفال استضافة من خلاله مجموعه من الاطفال والمشرفين التربوين.</p>
-                    <p></p>
-                </li>
-                <li>
-                    <h3>لقاءات انستقرام لايف</h3>
-                    <p>أجرت سلام حمود العديد من اللقاءات المباشرة عبر انستقرام راديو الرابعة، منها لقاء مع الفنانة باسكال مشعلاني.</p>
-                    <p></p>
-                </li>
-                <li>
-                    <h3>برنامج صباح الخير يا امارات</h3>
-                    <p>قدمة البرنامج لمدة 8 سنوات .</p>
-                    <p>  </p>
-                </li>
-                <li>
-                    <h3>برنامج يا هلا (ضيفة)</h3>
-                    <p>ظهرت كضيفة في برنامج يا هلا للحديث عن تحضيرات ومتابعة العمل الإذاعي ومواكبة الوسائل الحديثة.</p>
-                    <p> اذاعة اردنيه</p>
-                </li>
-                <li>
-                    <h3>لقاء محمد عساف</h3>
-                    <p>أجرت لقاءً مميزاً مع الفنان محمد عساف على راديو الرابعة وتلفزيون عجمان، والذي حقق نجاحاً كبيراً.</p>
-                    <p> </p>
-                </li>
-            </ul>
+                <ul class="program-list">
+                    <li>
+                        <h3>تمت نقل الأعمال السابقة والبرامج القديمة إلى صفحة منفصلة oldworks.html</h3>
+                    </li>
+                </ul>
         </section>
 
         <footer>
