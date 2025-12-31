@@ -939,10 +939,7 @@
                     latestSiteData = JSON.parse(saved);
                 }
             } catch (e) { /* تجاهل أي خطأ */ }
-            const html = generateHTML();
-            const blob = new Blob([html], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            // تم تعطيل generateHTML لأن النشر يتم عبر GitHub API مباشرة
             try {
                 // طباعة محتوى latestSiteData قبل النشر
                 console.log('siteData to be published:', latestSiteData);
