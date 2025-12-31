@@ -49,8 +49,7 @@
     "salam_new_img4.jpg",
     "salam_new_img5.jpg",
     "salam_new_img6.jpg",
-    "salam_new_img7.jpg",
-    "https://i.ytimg.com/vi/6gpOFJuDA1c/hqdefault.jpg"
+    "salam_new_img7.jpg"
   ],
   "videos": [
     {
@@ -92,6 +91,11 @@
       "id": "hLCYcLwprQI",
       "title": "الفنانة باسكال مشعلاني مع سلام حمود",
       "description": "لقاء مباشر عبر انستقرام راديو الرابعة مع الفنانة باسكال مشعلاني"
+    },
+    {
+      "id": "hLCYcLwprQI",
+      "title": "hLCYcLwprQI",
+      "description": "hLCYcLwprQI"
     }
   ],
   "social": {
@@ -101,5 +105,10 @@
     "facebook": "https://facebook.com/Salam.Hammoud.Anchor",
     "twitter": "https://twitter.com/SalamHam"
   },
-  "oldWorks": []
+  "oldWorks": [
+    {
+      "title": "سلام",
+      "description": "للللللللتجربه"
+    }
+  ]
 }
