@@ -43,28 +43,6 @@
 		"youtube": "https://youtube.com/@salamhammoud9",
 		"facebook": "https://facebook.com/Salam.Hammoud.Anchor",
 		"twitter": "https://twitter.com/SalamHam"
-	}
-}
-		{"icon": "💫", "title": "رسالتها", "content": "ترى سلام حمّود أن الميكروفون أمانة، وأن الإعلام الحقيقي هو الذي يُحدِث فرقًا في حياة الآخرين."}
-	],
-	"programs": [
-		{"title": "عالطريق مع سلام", "description": "برنامج حواري مسائي ترفيهي يتناول قضايا اجتماعية وثقافية متنوعة، ويستضيف شخصيات مؤثرة من مختلف المجالات على راديو الرابعة 107.8 FM", "note": "يوميا على راديو الرابعه"},
-		{"title": "بودكاست مع سلام", "description": "بودكاست حواري على منصات متعددة", "note": ""}
-	],
-	"gallery": [
-		"salam_hammoud.jpg",
-		"salam_new_img1.jpg",
-		"salam_new_img2.jpg"
-	],
-	"videos": [
-		{"id": "M9tQ0yM9sLY", "title": "الإنسان مقيد أم حر؟", "description": "نقاش فلسفي عميق حول الحرية والقيود في حياة الإنسان"},
-		{"id": "8Z9SuAR7QJw", "title": "بودكاست مع سلام - اخترت الشهرة والحرية على التعليم", "description": "حوار مع الدكتورة جنى بو رسلان حول القضايا الاجتماعية"}
-	],
-	"social": {
-		"instagram": "https://instagram.com/salam_hammoud",
-		"tiktok": "https://www.tiktok.com/@salam_hammoud",
-		"youtube": "https://youtube.com/@salamhammoud9",
-		"facebook": "https://facebook.com/Salam.Hammoud.Anchor",
-		"twitter": "https://twitter.com/SalamHam"
-	}
+	},
+	"oldWorks": []
 }
