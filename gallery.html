@@ -185,38 +185,8 @@
         <h1>📸 معرض الصور</h1>
         
         <ul class="gallery">
-            <li class="gallery-item">
-                <img src="salam_hammoud.jpg" alt="سلام حمود" onclick="openImagePopup('salam_hammoud.jpg')">
-                <a href="salam_hammoud.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img1.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img1.jpg')">
-                <a href="salam_new_img1.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img2.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img2.jpg')">
-                <a href="salam_new_img2.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img3.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img3.jpg')">
-                <a href="salam_new_img3.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img4.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img4.jpg')">
-                <a href="salam_new_img4.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img5.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img5.jpg')">
-                <a href="salam_new_img5.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img6.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img6.jpg')">
-                <a href="salam_new_img6.jpg" download class="download-link">⬇</a>
-            </li>
-            <li class="gallery-item">
-                <img src="salam_new_img7.jpg" alt="سلام حمود" onclick="openImagePopup('salam_new_img7.jpg')">
-                <a href="salam_new_img7.jpg" download class="download-link">⬇</a>
-            </li>
+        <!-- سيتم توليد الصور ديناميكيًا هنا -->
+        </ul>
         </ul>
     </div>
 
@@ -228,8 +198,33 @@
     </div>
 
     <script>
-        // الخلفية يتم ضبطها من CSS أو HTML فقط، لا تعتمد على localStorage
-        
+        // جلب الصور ديناميكيًا من comments.json
+        async function fetchGalleryImages() {
+            try {
+                // جلب ملف البيانات من GitHub أو من نفس المسار
+                const response = await fetch('comments.json?v=' + Date.now());
+                const data = await response.json();
+                const gallery = data.gallery || [];
+                renderGallery(gallery);
+            } catch (e) {
+                console.error('تعذر تحميل الصور:', e);
+            }
+        }
+
+        function renderGallery(images) {
+            const galleryList = document.querySelector('.gallery');
+            galleryList.innerHTML = '';
+            images.forEach(function(img) {
+                const li = document.createElement('li');
+                li.className = 'gallery-item';
+                li.innerHTML = `
+                    <img src="${img}" alt="سلام حمود" onclick="openImagePopup('${img}')">
+                    <a href="${img}" download class="download-link">⬇</a>
+                `;
+                galleryList.appendChild(li);
+            });
+        }
+
         function openImagePopup(src) {
             document.getElementById('imagePopup').classList.add('active');
             document.getElementById('popupImage').src = src;
@@ -250,6 +245,9 @@
                 closeImagePopup();
             }
         });
+
+        // تحميل الصور عند فتح الصفحة
+        fetchGalleryImages();
     </script>
 </body>
 </html>

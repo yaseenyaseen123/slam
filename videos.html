@@ -127,67 +127,49 @@
     <div class="container">
         <h1>🎬 فيديوهات مختارة</h1>
         
-        <ul class="video-grid">
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/M9tQ0yM9sLY" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>الإنسان مقيد أم حر؟</h3>
-                    <p>نقاش فلسفي عميق حول الحرية والقيود في حياة الإنسان</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/8Z9SuAR7QJw" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>بودكاست مع سلام - اخترت الشهرة والحرية على التعليم</h3>
-                    <p>حوار مع الدكتورة جنى بو رسلان حول القضايا الاجتماعية</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/83B6pgx2He4" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>لهذا السبب قررت ألا أعمل كموظف - ريكاردو كرم</h3>
-                    <p>حوار ملهم مع الإعلامي ريكاردو كرم حول ريادة الأعمال</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/tPvmdtjuK1w" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>لقاء محمد عساف مع سلام حمود</h3>
-                    <p>لقاء تاريخي مع الفنان محمد عساف على راديو الرابعة وتلفزيون عجمان عام 2014</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/EKf7Ar7hTN4" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>سلام حمود ضيفة برنامج سيلفي</h3>
-                    <p>ظهور سلام حمود في برنامج سيلفي على قناة الظفرة - فقرة المحبة والتسامح</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/yqH2S06nmJw" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>عم تحكي وتتحرك كتير؟ لحظة.. التوقف أحيانًا أقوى من الحركة</h3>
-                    <p>نصائح قيمة حول أهمية التوقف والتأمل في الحياة</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/nKDqPWle6pE" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>الحقيقة القاسية؟ ما حدا مهتم فيك</h3>
-                    <p>فيديو قصير حول فن الخطابة والتواصل مع الجمهور</p>
-                </div>
-            </li>
-            <li class="video-item">
-                <iframe src="https://www.youtube.com/embed/hLCYcLwprQI" allowfullscreen></iframe>
-                <div class="video-info">
-                    <h3>الفنانة باسكال مشعلاني مع سلام حمود</h3>
-                    <p>لقاء مباشر عبر انستقرام راديو الرابعة مع الفنانة باسكال مشعلاني</p>
-                </div>
-            </li>
+        <ul class="video-grid" id="videosList">
+            <!-- سيتم توليد الفيديوهات ديناميكيًا هنا -->
         </ul>
     </div>
     <script>
-        // الخلفية يتم ضبطها من CSS أو HTML فقط، لا تعتمد على localStorage
+        // جلب الفيديوهات من ملف البيانات
+        async function fetchVideos() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/yaseenyaseen123/slam/main/comments.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && Array.isArray(data.videos)) {
+                        renderVideos(data.videos);
+                    } else {
+                        document.getElementById('videosList').innerHTML = '<li>لا توجد فيديوهات متاحة حالياً.</li>';
+                    }
+                } else {
+                    document.getElementById('videosList').innerHTML = '<li>تعذر تحميل الفيديوهات.</li>';
+                }
+            } catch (e) {
+                document.getElementById('videosList').innerHTML = '<li>حدث خطأ أثناء تحميل الفيديوهات.</li>';
+            }
+        }
+
+        function renderVideos(videos) {
+            const list = document.getElementById('videosList');
+            if (!videos || videos.length === 0) {
+                list.innerHTML = '<li>لا توجد فيديوهات متاحة حالياً.</li>';
+                return;
+            }
+            list.innerHTML = videos.map(video => `
+                <li class="video-item">
+                    <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        // تحميل الفيديوهات عند فتح الصفحة
+        fetchVideos();
     </script>
 </body>
 </html>

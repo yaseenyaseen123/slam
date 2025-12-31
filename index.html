@@ -719,12 +719,51 @@
     </button>
 
     <script>
-        // Global functions - defined immediately after buttons
+        // تعريف بيانات افتراضية
+        let siteData = {
+            basic: {
+                name: 'سلام حمود',
+                subtitle: 'الإعلامية القديرة | مذيعة ومعدة برامج',
+                description: 'خبرة تزيد عن 15 عامًا في مجال الإعلام، متخصصة في فن الإلقاء والخطابة والتعليق الصوتي والبودكاست.',
+                profileImage: 'profile_image_new.jpg',
+                backgroundImage: 'new_background.png',
+                backgroundAudio: 'https://j.top4top.io/m_3650edbgi1.mp3'
+            },
+            infoCards: [],
+            programs: [],
+            gallery: [],
+            videos: [],
+            social: {}
+        };
+
+        // تحميل البيانات من comments.json
+        async function fetchSiteData() {
+            try {
+                console.log('جاري تحميل البيانات من GitHub...');
+                const res = await fetch('https://raw.githubusercontent.com/yaseenyaseen123/slam/main/comments.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log('تم تحميل البيانات من GitHub:', data);
+                    if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+                        siteData = data;
+                    } else {
+                        console.warn('البيانات من GitHub فارغة أو غير صالحة، سيتم استخدام البيانات الافتراضية.');
+                        document.body.insertAdjacentHTML('afterbegin', '<div style="background:#ff4757;color:#fff;padding:10px;text-align:center;">⚠️ البيانات من GitHub فارغة أو غير صالحة، يتم عرض البيانات الافتراضية.</div>');
+                    }
+                } else {
+                    console.error('فشل تحميل البيانات من GitHub:', res.status, res.statusText);
+                    document.body.insertAdjacentHTML('afterbegin', '<div style="background:#ff4757;color:#fff;padding:10px;text-align:center;">⚠️ فشل تحميل البيانات من GitHub: ' + res.status + ' ' + res.statusText + '</div>');
+                }
+            } catch (e) {
+                console.error('خطأ أثناء تحميل البيانات من GitHub:', e);
+                document.body.insertAdjacentHTML('afterbegin', '<div style="background:#ff4757;color:#fff;padding:10px;text-align:center;">⚠️ خطأ أثناء تحميل البيانات من GitHub: ' + (e.message || e) + '</div>');
+            }
+        }
+
+        // Global functions
         function toggleAudioFunc() {
             const audioElement = document.getElementById('backgroundAudio');
             const audioBtn = document.getElementById('audioControlBtn');
-            // لم يعد هناك siteData من localStorage، استخدم src مباشرة من العنصر
-            
             if (!audioElement.src || audioElement.src === window.location.href) {
                 const savedAudioUrl = siteData.basic?.backgroundAudio;
                 if (savedAudioUrl) {
@@ -740,7 +779,6 @@
                     return;
                 }
             }
-            
             if (audioElement.paused) {
                 audioElement.play().then(function() {
                     audioBtn.textContent = '🔊';
@@ -754,20 +792,21 @@
                 audioBtn.classList.remove('playing');
             }
         }
-        
         function closePopupFunc() {
             document.getElementById('welcomePopup').classList.remove('active');
             setTimeout(function() { toggleAudioFunc(); }, 500);
         }
-        
         function clearCacheAndReloadFunc() {
             window.location.reload(true);
         }
-        
-        // Attach event listeners
         document.getElementById('audioControlBtn').addEventListener('click', toggleAudioFunc);
         document.getElementById('clearCacheBtn').addEventListener('click', clearCacheAndReloadFunc);
         document.getElementById('closePopupBtn').addEventListener('click', closePopupFunc);
+
+        // تحميل البيانات قبل أي استخدام
+        fetchSiteData().then(() => {
+            // يمكن هنا إعادة تهيئة العناصر بناءً على siteData
+        });
     </script>
 
     <nav style="background: rgba(0, 0, 0, 0.5); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
