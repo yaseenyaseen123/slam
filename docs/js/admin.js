@@ -4,8 +4,7 @@ let currentTab = 'profile';
 // --- Login ---
 function checkPassword() {
     const input = document.getElementById('password-input').value;
-    // Simple client-side password for demonstration
-    if (input === 'admin123') {
+    if (input === 'salam2025') {
         document.getElementById('login-overlay').classList.add('hidden');
         document.getElementById('admin-panel').classList.remove('hidden');
         document.getElementById('admin-panel').classList.add('flex');
@@ -19,24 +18,25 @@ function checkPassword() {
 async function loadData() {
     try {
         const response = await fetch('./data/data.json');
+        if (!response.ok) throw new Error('Failed to load data');
         currentData = await response.json();
         switchTab('profile');
     } catch (error) {
-        alert('Error loading data. Make sure you are running this on a server (or VS Code Live Server).');
+        alert('تعذر تحميل البيانات. تأكد من وجود ملف data.json داخل مجلد docs/data.');
         console.error(error);
     }
 }
 
 function saveData() {
     // Update currentData from forms before saving (in case of blur issues)
-    // Actually, we update on input, so currentData should be fresh.
+    // We update on input so currentData should already be fresh.
 }
 
 function downloadData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 2));
     const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "data.json");
+    downloadAnchorNode.setAttribute('href', dataStr);
+    downloadAnchorNode.setAttribute('download', 'data.json');
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
@@ -45,8 +45,6 @@ function downloadData() {
 // --- Tabs ---
 function switchTab(tab) {
     currentTab = tab;
-    
-    // Update UI
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-white/10', 'text-gold-500');
         if (btn.dataset.tab === tab) {
@@ -70,24 +68,19 @@ function renderForm() {
         createTextarea(container, 'نبذة كاملة', currentData.profile.bio_full, (v) => currentData.profile.bio_full = v);
         createInput(container, 'رابط صورة الغلاف', currentData.profile.hero_image, (v) => currentData.profile.hero_image = v);
         createInput(container, 'نص الشعار', currentData.profile.logo_text, (v) => currentData.profile.logo_text = v);
-    } 
-    else if (currentTab === 'socials') {
+    } else if (currentTab === 'socials') {
         Object.keys(currentData.socials).forEach(key => {
             createInput(container, key, currentData.socials[key], (v) => currentData.socials[key] = v);
         });
-    }
-    else if (currentTab === 'programs') {
+    } else if (currentTab === 'programs') {
         renderListForm(container, currentData.programs, createProgramInputs);
-    }
-    else if (currentTab === 'videos') {
+    } else if (currentTab === 'videos') {
         renderListForm(container, currentData.videos, createVideoInputs);
-    }
-    else if (currentTab === 'gallery') {
-        renderListForm(container, currentData.gallery, createGalleryInput, true); // true for simple array
+    } else if (currentTab === 'gallery') {
+        renderListForm(container, currentData.gallery, createGalleryInput, true);
     }
 }
 
-// --- Helper: Input Creators ---
 function createInput(parent, label, value, onChange) {
     const div = document.createElement('div');
     div.className = 'mb-4';
@@ -122,12 +115,11 @@ function createTextarea(parent, label, value, onChange) {
 function renderListForm(parent, list, itemCreator, isSimpleArray = false) {
     const listContainer = document.createElement('div');
     listContainer.className = 'space-y-6';
-    
+
     list.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'p-4 border border-gray-300 rounded bg-gray-50 relative';
-        
-        // Delete Button
+
         const delBtn = document.createElement('button');
         delBtn.className = 'absolute top-2 left-2 text-red-500 hover:text-red-700 font-bold';
         delBtn.innerText = 'حذف';
@@ -144,15 +136,14 @@ function renderListForm(parent, list, itemCreator, isSimpleArray = false) {
 
     parent.appendChild(listContainer);
 
-    // Add New Button
     const addBtn = document.createElement('button');
     addBtn.className = 'mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600';
     addBtn.innerText = 'إضافة عنصر جديد';
     addBtn.onclick = () => {
-        if (isSimpleArray) list.push("https://placehold.co/400");
-        else if (currentTab === 'programs') list.push({ title: "New Program", description: "", channel: "", image: "" });
-        else if (currentTab === 'videos') list.push({ title: "New Video", url: "", thumbnail: "" });
-        
+        if (isSimpleArray) list.push('https://placehold.co/400');
+        else if (currentTab === 'programs') list.push({ title: 'New Program', description: '', channel: '', image: '' });
+        else if (currentTab === 'videos') list.push({ title: 'New Video', url: '', thumbnail: '' });
+
         renderForm();
         renderPreview();
     };
@@ -198,8 +189,7 @@ function renderPreview() {
                 <p>${currentData.profile.bio_full}</p>
             </div>
         `;
-    }
-    else if (currentTab === 'socials') {
+    } else if (currentTab === 'socials') {
         container.innerHTML = `<div class="flex flex-col space-y-2 p-4">
             ${Object.entries(currentData.socials).map(([k, v]) => `
                 <a href="${v}" class="text-blue-600 hover:underline flex items-center gap-2">
@@ -207,8 +197,7 @@ function renderPreview() {
                 </a>
             `).join('')}
         </div>`;
-    }
-    else if (currentTab === 'programs') {
+    } else if (currentTab === 'programs') {
         container.innerHTML = `<div class="grid grid-cols-1 gap-4">
             ${currentData.programs.map(p => `
                 <div class="bg-royal-900 text-white rounded overflow-hidden shadow">
@@ -221,8 +210,7 @@ function renderPreview() {
                 </div>
             `).join('')}
         </div>`;
-    }
-    else if (currentTab === 'videos') {
+    } else if (currentTab === 'videos') {
         container.innerHTML = `<div class="grid grid-cols-1 gap-4">
             ${currentData.videos.map(v => `
                 <div class="bg-black text-white rounded overflow-hidden shadow">
@@ -235,8 +223,7 @@ function renderPreview() {
                 </div>
             `).join('')}
         </div>`;
-    }
-    else if (currentTab === 'gallery') {
+    } else if (currentTab === 'gallery') {
         container.innerHTML = `<div class="grid grid-cols-2 gap-2">
             ${currentData.gallery.map(img => `
                 <img src="${img}" class="w-full h-32 object-cover rounded">
@@ -244,3 +231,21 @@ function renderPreview() {
         </div>`;
     }
 }
+
+// fix: fill temporary default content if no data is loaded
+if (!currentData.profile) currentData = {
+  profile: {
+    name: 'سلام حمود',
+    title: 'إعلامية | مقدمة برامج | مدربة صوت',
+    bio_short: 'إعلامية لبنانية بخبرة تزيد عن 15 عاماً.',
+    bio_full: 'سلام حمود إعلامية لبنانية...',
+    hero_image: 'https://placehold.co/600x800/1e1b4b/d4af37?text=Salam+Hammoud',
+    logo_text: 'SALAM'
+  },
+  socials: { instagram: 'https://instagram.com/salam_hammoud', twitter: 'https://twitter.com/SalamHam', facebook: 'https://facebook.com/Salam.Hammoud.Anchor', youtube: 'https://youtube.com/@salamhammoud9', tiktok: 'https://www.tiktok.com/@salam_hammoud', email: 'contact@salamhammoud.com' },
+  programs: [{ title: 'عالطريق مع سلام', channel: 'راديو الرابعة', description: 'برنامج حواري', image: 'https://placehold.co/400x300/1e1b4b/d4af37?text=Program' }],
+  gallery: ['https://placehold.co/400x400/1e1b4b/d4af37?text=Event+1','https://placehold.co/400x400/1e1b4b/d4af37?text=Studio'],
+  videos: [{ title: 'أحدث حلقة', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', thumbnail: 'https://placehold.co/600x340/1e1b4b/d4af37?text=Video+1' }]
+};
+
+// End of admin JS
